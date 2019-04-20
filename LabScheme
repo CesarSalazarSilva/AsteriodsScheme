@@ -1,0 +1,391 @@
+#!r6rs
+(import (rnrs lists (6))
+        (rnrs base (6))
+        (rnrs io simple (6)))
+
+(define null '())
+
+;Estas constantes
+(define a 2)
+(define c 0)
+(define m 9)
+;Esta función random tuma un xn y obtiene el xn+1 de la secuencia de números aleatorios.
+(define myRandom
+  (lambda
+    (xn)
+    (mod (+ (* a xn) c) m)
+  )
+)
+;Cada vez que pedimos un random, debemos pasar como argumento el random anterior.
+
+
+;Acá un ejemplo que permite generar una lista de números aleatorios.
+;Parámetros:
+;* "cuantos" indica el largo de la lista a generar.
+;* "xActual" valor actual del random, se pasa en cada nivel de recursión de forma actualizada
+;* "maximo" Los números generados van desde 0 hasta maximo-1
+(define getListaRandom
+  (lambda (cuantos xActual maximo)
+    (if (= 0 cuantos)
+        '()
+        (let ((xNvo (myRandom xActual)))
+          (cons (mod xNvo maximo)
+              (getListaRandom (- cuantos 1) xNvo maximo)
+          )
+        )
+    )
+  )
+)
+
+
+;Sea 1 = nave; 2 = asteroide y 3 = disparo;
+;########################### TDA TABLERORL ##############################
+
+;Funcion que crea una lista llena de ceros para representar una fila vacia.
+;Funcion Recursiva? : Si, se utiliza una R.Lineal, dado que me permite guardar
+; N ceros en una lista vacia entregada en el caso base.
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;(create_fila_vacia 5)  -----> {0 0 0 0 0}
+;(create_fila_vacia 1)  -----> {0}
+;(create_fila_vacia 14) -----> {0 0 0 0 0 0 0 0 0 0 0 0 0 0}
+;A.Entrada: Un entero que representa la cantidad de ceros en la fila.
+;A.Salida : Una lista llena de N ceros.
+(define (create_fila_vacia N)
+  (if (= N 0)
+      (list)
+      (cons 0 (create_fila_vacia (- N 1)) )
+      )
+  )
+
+;Funcion que que crea una matriz tablero de MxN vacio.
+;Funcion Recursiva? : Si, se utiliza R.Lineal, primer argumento de cons es una lista de N ceros. 
+; que se acopla M veces a la lista del caso base dando lugar a la Matriz MxN. 
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;(create_tablero_vacio 5 3) -----> {{0 0 0} {0 0 0} {0 0 0} {0 0 0} {0 0 0}}
+;(create_tablero_vacio 3 8) -----> {{0 0 0 0 0 0 0 0} {0 0 0 0 0 0 0 0} {0 0 0 0 0 0 0 0}}
+;(create_tablero_vacio 4 4) -----> {{0 0 0 0} {0 0 0 0} {0 0 0 0} {0 0 0 0}}
+;A.Entrada: Dos enteros que representan Columna (x Fila) ó (x e y) ó (M x N).
+;A.Salida : Una lista de listas llena de ceros (MxN).
+(define (create_tablero_vacio M N)
+  (if (or (string? M)
+          (string? N)
+          (list? M)
+          (list? N)
+          (< N 0)
+          (< M 0)  
+          )
+      (list)
+      (if(= M 0 )
+         (list)
+         (cons (create_fila_vacia N) (create_tablero_vacio (- M 1) N))
+         )
+      )
+)
+  
+;Funcion que selecciona una fila de el tablero.
+;Funcion Recursiva? : Si, se utiliza una R.de Cola ya que vamos acortando la lista original
+;con cdr y obtenemos la fila de interes con el car en la iteracion py-esima.
+;Ejemplos(Lista ejemplo; luego la invocacion , luego de la flecha esta el resultado esperado de esta):
+;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 3 1) -----> {7 8 9}
+;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 2 1) -----> {4 5 6}
+;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 1 1) -----> {1 2 3}
+;A.Entrada: Space es una lista de listas de igual tamaño, py es un entero refiere a la posicion Y, auxiliar que cuenta de la posicion 1.
+;A.Salida : Lista que representa la fila seleccionada.
+(define (Selector_fila space py auxiliar)
+  (if (= auxiliar py)
+      (car space)
+      (Selector_fila (cdr space) py (+ auxiliar 1) )
+   )
+ )
+;Funcion que simplifica el llamado de Selector_fila, el 1 es para que la recursion vaya desde
+;el primer elemento haciendo cdr en el llamado recursivo de Seleccion_fila hasta el ultimo, que es py.
+;Funcion Recursiva? : No
+;Ejemplos(Lista ejemplo; luego la invocacion , luego de la flecha esta el resultado esperado de esta):
+;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 3) -----> {7 8 9}
+;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 2) -----> {4 5 6}
+;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 1) -----> {1 2 3}
+;A.Entrada: Space es una lista de listas de igual tamaño, py es un entero refiere a la posicion Y
+;A.Salida : Lista que representa la fila seleccionada.
+(define (Seleccion_posicion space py)
+  (Selector_fila space py 1)
+  )
+
+;Funcion que selecciona un elemento, de una columna especifica, de una fila en el tablero.
+;siempre de la forma columaxfila
+;Funcion Recursiva? : No.
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_x_y A 3 3) -----> 9
+;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_x_y A 1 2) -----> 4
+;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_x_y A 2 3) -----> 8
+;A.Entrada: Space es una lista de listas, px entero que representa las columnas, py entero que representa las filas.
+;A.Salida : Valor de la posicion buscada.
+(define (Selector_x_y space px py)
+  (Seleccion_posicion (Seleccion_posicion space py) px)
+ )
+
+
+;Funcion que 
+;Funcion Recursiva? : 
+;
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;
+;
+;
+;A.Entrada: 
+;A.Salida :
+(define (create_SpaceRL N M A P L seed)
+  (if (and (integer? N)
+           (integer? M)
+           )
+      ;Creacion de la Matriz que representa el tablero
+          (create_tablero_vacio N M )
+          null
+   )
+ )
+
+;########################################################################
+
+
+
+;########################### TDA TABLERORC ##############################
+(define (createSpaceRC N M A P L seed)
+  (if (and (integer? N)
+           (integer? M)
+           (integer? A)
+           (integer? seed)
+           )
+          (list  N M A P L seed)
+          null
+   )
+ )
+
+;########################################################################
+
+  
+
+;########################### TDA NAVE ###################################
+; - Representacion de Nave-----------------------------------------------
+; - Constructor de Nave -------------------------------------------------
+;Funcion que construye la nave y sus parametros respectivos
+;Funcion Recursiva? : 
+;
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;(create_nave  "space" 5 4 3 2 ) ----> {"space" 5 4 3 2}
+;(create_nave  "space" 3 5 2 1400 ) -----> {"space" 3 5 2 1400}
+;(create_nave  "space" 3 3 6 500 ) -----> {"space" 3 3 6 500}
+;A.Entrada: La estructura del tablero , entero de la posicion x, entero de la posicion y , seed
+;A.Salida :
+(define (create_nave  space px py velocidad seed )
+  (if (and  (integer? px)
+               (integer? py)
+               (integer? velocidad)
+               (integer? seed)
+           )
+          (list  space px py velocidad seed)
+          null
+   )  
+)
+
+;
+
+
+; - Funcion de pertenencia Nave -----------------------------------------
+;Funcion que verifica si la estructura entregada es una nave
+;Funcion Recursiva? : No
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;(nave? (list "space" 3 3 6 500 )) -----> #t
+;(nave? (list "space" 3 5 2 1400 )) -----> #t
+;(nave? (list "space" '(5 6 7) 5 2 1400 )) -----># f
+;A.Entrada: Una lista posible nave.
+;A.Salida : #t o #f dependiendo si cumple con los requisitos de la estructura de la nave
+(define (nave? posibleNave)
+  (if (list? posibleNave)
+      (if (= 5 (length posibleNave))
+          (if (and
+                   (integer? (car (cdr posibleNave)))
+                   (integer? (car (cdr (cdr posibleNave))))
+                   (integer? (car (cdr (cdr (cdr posibleNave)))))
+                   (integer? (car (cdr (cdr (cdr (cdr posibleNave))))))
+              )
+              #t
+              #f
+          )
+          #f
+      )
+      #f
+  )
+)
+
+
+; moveShip --------------------------------------------------------------
+;Funcion que da la nueva posicion de la nave para un angulo distinto y velocidad distinta
+;Funcion Recursiva? : 
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;
+;
+;
+;A.Entrada: 
+;A.Salida :
+(define (moveShip space px py angulo velocidad seed)
+  null
+ )
+
+; - Selectores ----------------------------------------------------------
+;Funcion que toma la posicion x
+;Funcion Recursiva? : N0.
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+; (Selector_px_nave (list "space" 3 3 6 500)) -----> 3
+; (Selector_px_nave (list "space" -12 3 6 500)) -----> -12
+; (Selector_px_nave (list "space" 14 3 6 500)) -----> 14
+;A.Entrada: Una lista representando a la nave 
+;A.Salida : px
+(define (Selector_px_nave nave)
+  (if (nave? nave)
+      (car (cdr nave))
+      #f
+      )
+  )
+
+;Funcion que toma la posicion y
+;Funcion Recursiva? : N0.
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+; (Selector_py_nave (list "space" 3 3 6 500)) -----> 3
+; (Selector_py_nave (list "space" -12 4 6 500)) -----> 4
+; (Selector_py_nave (list "space" 14 6 6 500)) -----> 6
+;A.Entrada: Una lista representando a la nave 
+;A.Salida : py
+(define (Selector_py_nave nave)
+  (if (nave? nave)
+      (car (cdr (cdr nave)))
+      #f
+      )
+  )
+
+;Funcion que toma la posicion velocidad
+;Funcion Recursiva? : N0.
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+; (Selector_velocidad_nave (list "space" 3 3 6 500)) -----> 6
+; (Selector_velocidad_nave (list "space" -12 4 16 500)) -----> 16
+; (Selector_velocidad_nave (list "space" 14 6 40 500)) -----> 40
+;A.Entrada: Una lista representando a la nave 
+;A.Salida : velocidad
+(define (Selector_velocidad_nave nave)
+  (if (nave? nave)
+      (car (cdr (cdr (cdr nave))))
+      #f
+      )
+  )
+
+;Funcion que toma la posicion seed
+;Funcion Recursiva? : N0.
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+; (Selector_seed_nave (list "space" 3 3 6 6500)) -----> 6500
+; (Selector_seed_nave (list "space" -12 4 16 1500)) -----> 1500
+; (Selector_seed_nave (list "space" 14 6 40 530)) -----> 530
+;A.Entrada: Una lista representando a la nave 
+;A.Salida : seed
+(define (Selector_seed_nave nave)
+  (if (nave? nave)
+      (car (cdr (cdr (cdr (cdr nave)))))
+      #f
+      )
+  )
+
+
+; - Modificador Nave ----------------------------------------------------
+;Funcion que 
+;Funcion Recursiva? : 
+;
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;
+;
+;
+;A.Entrada: 
+;A.Salida :
+(define (nave->vidas nave)
+  (if (nave? nave)
+      (car (cdr (cdr (cdr nave))))
+      null
+  )
+)
+
+; - Funciones Varias ----------------------------------------------------
+
+;########################################################################
+
+
+
+;########################### TDA ASTEROIDE/S #############################
+; - Representacion de Asteroide -----------------------------------------
+;Funcion que 
+;Funcion Recursiva? : 
+;
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;
+;
+;
+;A.Entrada: 
+;A.Salida :
+(define (init_asteroid  space px py angulo velocidad radio seed )
+  (if (and (integer? px)
+           (integer? py)
+           (integer? velocidad)
+           (integer? seed)
+           (integer? radio)
+           )
+          (list space radio px py angulo velocidad seed)
+          null
+   )
+ )
+;Funcion que 
+;Funcion Recursiva? : 
+;
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;
+;
+;
+;A.Entrada: 
+;A.Salida :
+ (define (create_Asteroides cantidad seed )
+  (if (and (integer? cantidad)
+           (integer? seed)
+           )
+          (list (list 1 2 4 60 15 1222) ( list 2 8  4 60 15 1222) (list 6 7 6 25 2 1222))
+          null
+   )
+ )
+
+;########################################################################
+
+
+
+;########################### TDA DISPAROS ###############################
+; - Representacion Disparo ----------------------------------------------
+;Funcion que 
+;Funcion Recursiva? : 
+;
+;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;
+;
+;
+;A.Entrada: 
+;A.Salida :
+(define (init_disparo space px py angulo velocidad pxf pyf largo seed)
+  (if (and (integer? px)
+           (integer? py)
+           (integer? pxf)
+           (integer? pyf)
+           (integer? velocidad)
+           (integer? largo)
+           (integer? seed)
+           )
+          (list space px py pxf pyf angulo velocidad largo seed)
+          null
+   )
+  
+)
+
+;########################################################################
+(define A (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12) ) )
+
+     
