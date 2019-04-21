@@ -9,16 +9,15 @@
 (define a 2)
 (define c 0)
 (define m 9)
+(define pi 3.1415926535897932384626433832795028841)
 ;Esta función random tuma un xn y obtiene el xn+1 de la secuencia de números aleatorios.
 (define myRandom
   (lambda
-    (xn)
+      (xn)
     (mod (+ (* a xn) c) m)
+    )
   )
-)
 ;Cada vez que pedimos un random, debemos pasar como argumento el random anterior.
-
-
 ;Acá un ejemplo que permite generar una lista de números aleatorios.
 ;Parámetros:
 ;* "cuantos" indica el largo de la lista a generar.
@@ -30,215 +29,104 @@
         '()
         (let ((xNvo (myRandom xActual)))
           (cons (mod xNvo maximo)
-              (getListaRandom (- cuantos 1) xNvo maximo)
+                (getListaRandom (- cuantos 1) xNvo maximo)
+                )
           )
         )
     )
   )
-)
+
+;-------------------------------------------------------------------------------------------------- TDA NAVE
+;-------------------------------------------------------------------------------------------------- REPRESENTACION NAVE
+; (list  space px py velocidad seed estadoJuego angulo)
 
 
-;Sea 1 = nave; 2 = asteroide y 3 = disparo;
-;########################### TDA TABLERORL ##############################
+;-------------------------------------------------------------------------------------------------- CONSTRUCTORES NAVE
 
-;Funcion que crea una lista llena de ceros para representar una fila vacia.
-;Funcion Recursiva? : Si, se utiliza una R.Lineal, dado que me permite guardar
-; N ceros en una lista vacia entregada en el caso base.
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
-;(create_fila_vacia 5)  -----> {0 0 0 0 0}
-;(create_fila_vacia 1)  -----> {0}
-;(create_fila_vacia 14) -----> {0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-;A.Entrada: Un entero que representa la cantidad de ceros en la fila.
-;A.Salida : Una lista llena de N ceros.
-(define (create_fila_vacia N)
-  (if (= N 0)
-      (list)
-      (cons 0 (create_fila_vacia (- N 1)) )
-      )
-  )
-
-;Funcion que que crea una matriz tablero de MxN vacio.
-;Funcion Recursiva? : Si, se utiliza R.Lineal, primer argumento de cons es una lista de N ceros. 
-; que se acopla M veces a la lista del caso base dando lugar a la Matriz MxN. 
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
-;(create_tablero_vacio 5 3) -----> {{0 0 0} {0 0 0} {0 0 0} {0 0 0} {0 0 0}}
-;(create_tablero_vacio 3 8) -----> {{0 0 0 0 0 0 0 0} {0 0 0 0 0 0 0 0} {0 0 0 0 0 0 0 0}}
-;(create_tablero_vacio 4 4) -----> {{0 0 0 0} {0 0 0 0} {0 0 0 0} {0 0 0 0}}
-;A.Entrada: Dos enteros que representan Columna (x Fila) ó (x e y) ó (M x N).
-;A.Salida : Una lista de listas llena de ceros (MxN).
-(define (create_tablero_vacio M N)
-  (if (or (string? M)
-          (string? N)
-          (list? M)
-          (list? N)
-          (< N 0)
-          (< M 0)  
-          )
-      (list)
-      (if(= M 0 )
-         (list)
-         (cons (create_fila_vacia N) (create_tablero_vacio (- M 1) N))
-         )
-      )
-)
-  
-;Funcion que selecciona una fila de el tablero.
-;Funcion Recursiva? : Si, se utiliza una R.de Cola ya que vamos acortando la lista original
-;con cdr y obtenemos la fila de interes con el car en la iteracion py-esima.
-;Ejemplos(Lista ejemplo; luego la invocacion , luego de la flecha esta el resultado esperado de esta):
-;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 3 1) -----> {7 8 9}
-;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 2 1) -----> {4 5 6}
-;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 1 1) -----> {1 2 3}
-;A.Entrada: Space es una lista de listas de igual tamaño, py es un entero refiere a la posicion Y, auxiliar que cuenta de la posicion 1.
-;A.Salida : Lista que representa la fila seleccionada.
-(define (Selector_fila space py auxiliar)
-  (if (= auxiliar py)
-      (car space)
-      (Selector_fila (cdr space) py (+ auxiliar 1) )
-   )
- )
-;Funcion que simplifica el llamado de Selector_fila, el 1 es para que la recursion vaya desde
-;el primer elemento haciendo cdr en el llamado recursivo de Seleccion_fila hasta el ultimo, que es py.
-;Funcion Recursiva? : No
-;Ejemplos(Lista ejemplo; luego la invocacion , luego de la flecha esta el resultado esperado de esta):
-;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 3) -----> {7 8 9}
-;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 2) -----> {4 5 6}
-;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 1) -----> {1 2 3}
-;A.Entrada: Space es una lista de listas de igual tamaño, py es un entero refiere a la posicion Y
-;A.Salida : Lista que representa la fila seleccionada.
-(define (Seleccion_posicion space py)
-  (Selector_fila space py 1)
-  )
-
-;Funcion que selecciona un elemento, de una columna especifica, de una fila en el tablero.
-;siempre de la forma columaxfila
-;Funcion Recursiva? : No.
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
-;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_x_y A 3 3) -----> 9
-;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_x_y A 1 2) -----> 4
-;Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_x_y A 2 3) -----> 8
-;A.Entrada: Space es una lista de listas, px entero que representa las columnas, py entero que representa las filas.
-;A.Salida : Valor de la posicion buscada.
-(define (Selector_x_y space px py)
-  (Seleccion_posicion (Seleccion_posicion space py) px)
- )
-
-
-;Funcion que 
-;Funcion Recursiva? : 
+;Funcion  : Construye una nave.
+;A.Entrada: Una estructura space, un entero para: posicion x, posicion, velocidad y para seed.
+;           ("P" ó "V" ó "D") para el estado de juego, un numero para angulo 
+;A.Salida : Una estructura nave.
+;
+;Funcion Recursiva? : No, dato que creamos una nueva nave solo asignando valores en la lista.
 ;
 ;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
 ;
 ;
 ;
-;A.Entrada: 
-;A.Salida :
-(define (create_SpaceRL N M A P L seed)
-  (if (and (integer? N)
-           (integer? M)
-           )
-      ;Creacion de la Matriz que representa el tablero
-          (create_tablero_vacio N M )
-          null
-   )
- )
-
-;########################################################################
-
-
-
-;########################### TDA TABLERORC ##############################
-(define (createSpaceRC N M A P L seed)
-  (if (and (integer? N)
-           (integer? M)
-           (integer? A)
-           (integer? seed)
-           )
-          (list  N M A P L seed)
-          null
-   )
- )
-
-;########################################################################
-
-  
-
-;########################### TDA NAVE ###################################
-; - Representacion de Nave-----------------------------------------------
-; - Constructor de Nave -------------------------------------------------
-;Funcion que construye la nave y sus parametros respectivos
-;Funcion Recursiva? : 
-;
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
-;(create_nave  "space" 5 4 3 2 ) ----> {"space" 5 4 3 2}
-;(create_nave  "space" 3 5 2 1400 ) -----> {"space" 3 5 2 1400}
-;(create_nave  "space" 3 3 6 500 ) -----> {"space" 3 3 6 500}
-;A.Entrada: La estructura del tablero , entero de la posicion x, entero de la posicion y , seed
-;A.Salida :
-(define (create_nave  space px py velocidad seed )
+(define (create_nave  space px py velocidad seed estadoJuego angulo)
   (if (and  (integer? px)
-               (integer? py)
-               (integer? velocidad)
-               (integer? seed)
-           )
-          (list  space px py velocidad seed)
-          null
-   )  
-)
+            (integer? py)
+            (integer? velocidad)
+            (integer? seed)
+            )
+      (list  space px py velocidad seed estadoJuego angulo)
+      null
+      )  
+  )
 
+;-------------------------------------------------------------------------------------------------- PERTENENCIA NAVE
+
+;Funcion  : Verifica si el argumento entregado corresponde a una estructura Nave.
+;A.Entrada: Una estructura nave.
+;            
+;A.Salida : Booleano dependiedo si cumple con los rquesitos de una estructura nave.
 ;
-
-
-; - Funcion de pertenencia Nave -----------------------------------------
-;Funcion que verifica si la estructura entregada es una nave
 ;Funcion Recursiva? : No
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
-;(nave? (list "space" 3 3 6 500 )) -----> #t
-;(nave? (list "space" 3 5 2 1400 )) -----> #t
-;(nave? (list "space" '(5 6 7) 5 2 1400 )) -----># f
-;A.Entrada: Una lista posible nave.
-;A.Salida : #t o #f dependiendo si cumple con los requisitos de la estructura de la nave
+;
+;Ejemplos:
+;
+;
+;
 (define (nave? posibleNave)
   (if (list? posibleNave)
-      (if (= 5 (length posibleNave))
+      (if (= 7 (length posibleNave))
           (if (and
-                   (integer? (car (cdr posibleNave)))
-                   (integer? (car (cdr (cdr posibleNave))))
-                   (integer? (car (cdr (cdr (cdr posibleNave)))))
-                   (integer? (car (cdr (cdr (cdr (cdr posibleNave))))))
-              )
+               (integer? (car (cdr posibleNave)))
+               (integer? (car (cdr (cdr posibleNave))))
+               (integer? (car (cdr (cdr (cdr posibleNave)))))
+               (integer? (car (cdr (cdr (cdr (cdr posibleNave))))))
+               )
               #t
               #f
-          )
+              )
           #f
-      )
+          )
       #f
+      )
   )
-)
 
+;-------------------------------------------------------------------------------------------------- SELECTORES NAVE -
 
-; moveShip --------------------------------------------------------------
-;Funcion que da la nueva posicion de la nave para un angulo distinto y velocidad distinta
+;Funcion  : Selecciona el space completo entregado a la estructura nave.
+;A.Entrada: Una estructura nave.
+;            
+;A.Salida : Space presente en la nave.
+;
 ;Funcion Recursiva? : 
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;
+;Ejemplos:
 ;
 ;
 ;
-;A.Entrada: 
-;A.Salida :
-(define (moveShip space px py angulo velocidad seed)
-  null
- )
+(define (Selector_space_nave nave)
+  (if (nave? nave)
+      (car  nave)
+      #f
+      )
+  )
 
-; - Selectores ----------------------------------------------------------
-;Funcion que toma la posicion x
-;Funcion Recursiva? : N0.
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
-; (Selector_px_nave (list "space" 3 3 6 500)) -----> 3
-; (Selector_px_nave (list "space" -12 3 6 500)) -----> -12
-; (Selector_px_nave (list "space" 14 3 6 500)) -----> 14
-;A.Entrada: Una lista representando a la nave 
-;A.Salida : px
+;Funcion  : Selecciona componente x de la nave.
+;A.Entrada: Una estructura nave.
+;            
+;A.Salida : De ser nave retorna su componente x.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
 (define (Selector_px_nave nave)
   (if (nave? nave)
       (car (cdr nave))
@@ -246,14 +134,17 @@
       )
   )
 
-;Funcion que toma la posicion y
-;Funcion Recursiva? : N0.
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
-; (Selector_py_nave (list "space" 3 3 6 500)) -----> 3
-; (Selector_py_nave (list "space" -12 4 6 500)) -----> 4
-; (Selector_py_nave (list "space" 14 6 6 500)) -----> 6
-;A.Entrada: Una lista representando a la nave 
-;A.Salida : py
+;Funcion  : Selecciona componente y de la nave.
+;A.Entrada: Una estructura nave.
+;            
+;A.Salida : De ser nave retorna su componente y.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
 (define (Selector_py_nave nave)
   (if (nave? nave)
       (car (cdr (cdr nave)))
@@ -261,14 +152,17 @@
       )
   )
 
-;Funcion que toma la posicion velocidad
-;Funcion Recursiva? : N0.
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
-; (Selector_velocidad_nave (list "space" 3 3 6 500)) -----> 6
-; (Selector_velocidad_nave (list "space" -12 4 16 500)) -----> 16
-; (Selector_velocidad_nave (list "space" 14 6 40 500)) -----> 40
-;A.Entrada: Una lista representando a la nave 
-;A.Salida : velocidad
+;Funcion  : Selecciona componente velocidad de la nave.
+;A.Entrada: Una estructura nave.
+;            
+;A.Salida : De ser nave retorna su componente velocidad.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
 (define (Selector_velocidad_nave nave)
   (if (nave? nave)
       (car (cdr (cdr (cdr nave))))
@@ -276,14 +170,17 @@
       )
   )
 
-;Funcion que toma la posicion seed
-;Funcion Recursiva? : N0.
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
-; (Selector_seed_nave (list "space" 3 3 6 6500)) -----> 6500
-; (Selector_seed_nave (list "space" -12 4 16 1500)) -----> 1500
-; (Selector_seed_nave (list "space" 14 6 40 530)) -----> 530
-;A.Entrada: Una lista representando a la nave 
-;A.Salida : seed
+;Funcion  : Selecciona componente seed de la nave.
+;A.Entrada: Una estructura nave.
+;            
+;A.Salida : De ser nave retorna su componente seed.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
 (define (Selector_seed_nave nave)
   (if (nave? nave)
       (car (cdr (cdr (cdr (cdr nave)))))
@@ -291,61 +188,357 @@
       )
   )
 
-
-; - Modificador Nave ----------------------------------------------------
-;Funcion que 
+;Funcion  : Selecciona componente estadojuego de la nave.
+;A.Entrada: Una estructura nave.
+;            
+;A.Salida : De ser nave retorna su componente estadojuego.
+;
 ;Funcion Recursiva? : 
 ;
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;Ejemplos:
 ;
 ;
 ;
-;A.Entrada: 
-;A.Salida :
-(define (nave->vidas nave)
+(define (Selector_estadojuego_nave nave)
   (if (nave? nave)
-      (car (cdr (cdr (cdr nave))))
-      null
+      (car (cdr (cdr (cdr (cdr (cdr nave))))))
+      #f
+      )
   )
-)
 
-; - Funciones Varias ----------------------------------------------------
-
-;########################################################################
-
-
-
-;########################### TDA ASTEROIDE/S #############################
-; - Representacion de Asteroide -----------------------------------------
-;Funcion que 
+;Funcion  : Selecciona componente angulo de la nave.
+;A.Entrada: Una estructura nave.
+;            
+;A.Salida : De ser nave retorna su componente angulo.
+;
 ;Funcion Recursiva? : 
 ;
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;Ejemplos:
 ;
 ;
 ;
+(define (Selector_angulo_nave nave)
+  (if (nave? nave)
+      (car (cdr (cdr (cdr (cdr (cdr(cdr nave)))))))
+      #f
+      )
+  )
+
+;-------------------------------------------------------------------------------------------------- MODIFICADORES NAVE -
+
+;Funcion  : Toma una estructura nave, un nuevo space y retorna una nueva nave con nuevo space.
+;A.Entrada: Una estructura nave y un nuevo space.
+;            
+;A.Salida : Nave con su space modificado
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (nave->space nave nuevospace)
+  (if (and (nave? nave)
+           )
+      (create_nave nuevospace
+                   (Selector_px_nave nave)
+                   (Selector_py_nave nave)
+                   (Selector_velocidad_nave nave)
+                   (Selector_seed_nave nave)
+                   (Selector_estadojuego_nave nave)
+                   (Selector_angulo_nave nave)
+                   )
+      nave
+      )
+  )
+
+;Funcion  : Toma una estructura nave, un nuevo "x" y retorna una nueva nave con nuevo "x".
+;A.Entrada: Una estructura nave y un nuevo "x".
+;            
+;A.Salida : Nave con su posicion "x" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (nave->px nave nuevopx)
+  (if (and (nave? nave)
+           (< -1 nuevopx)
+           )
+      (create_nave (Selector_space_nave nave)
+                   nuevopx
+                   (Selector_py_nave nave)
+                   (Selector_velocidad_nave nave)
+                   (Selector_seed_nave nave)
+                   (Selector_estadojuego_nave nave)
+                   (Selector_angulo_nave nave)
+                   )
+      nave
+      )
+  )
+
+;Funcion  : Toma una estructura nave, un nuevo "y" y retorna una nueva nave con nuevo "y".
+;A.Entrada: Una estructura nave y un nuevo "y".
+;            
+;A.Salida : Nave con su posicion "y" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (nave->py nave nuevopy)
+  (if (and (nave? nave)
+           (< -1 nuevopy)
+           )
+      (create_nave (Selector_space_nave nave)
+                   (Selector_px_nave nave)
+                   nuevopy
+                   (Selector_velocidad_nave nave)
+                   (Selector_seed_nave nave)
+                   (Selector_estadojuego_nave nave)
+                   (Selector_angulo_nave nave)
+                   )
+      nave
+      )
+  )
+
+;Funcion  : Toma una estructura nave, una nueva "velocidad" y retorna una nueva nave con nuevo "velocidad".
+;A.Entrada: Una estructura nave y una nueva "velocidad".
+;            
+;A.Salida : Nave con su posicion "velocidad" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (nave->velocidad nave nuevavelocidad)
+  (if (and (nave? nave)
+           (integer? nuevavelocidad)
+           )
+      (create_nave (Selector_space_nave nave)
+                   (Selector_px_nave nave)
+                   (Selector_py_nave nave)
+                   nuevavelocidad
+                   (Selector_seed_nave nave)     
+                   (Selector_estadojuego_nave nave)
+                   (Selector_angulo_nave nave)
+                   )
+      nave
+      )
+  )
+
+;Funcion  : Toma una estructura nave, un nuevo "seed" y retorna una nueva nave con nuevo "seed".
+;A.Entrada: Una estructura nave y un nuevo "seed".
+;            
+;A.Salida : Nave con su posicion "seed" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (nave->seed nave nuevoseed)
+  (if (and (nave? nave)
+           )
+      (create_nave(Selector_space_nave nave)
+                  (Selector_px_nave nave)
+                  (Selector_py_nave nave)
+                  (Selector_velocidad_nave nave)
+                  nuevoseed
+                  (Selector_estadojuego_nave nave)
+                  (Selector_angulo_nave nave)
+                  )
+      nave
+      )
+  )
+
+;Funcion  : Toma una estructura nave, un nuevo "estadojuego" y retorna una nueva nave con nuevo "estadojuego".
+;A.Entrada: Una estructura nave y un nuevo "estadojuego".
+;            
+;A.Salida : Nave con su posicion "estadojuego" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (nave->estadojuego nave nuevoestado)
+  (if (and (nave? nave)
+           )
+      (create_nave(Selector_space_nave nave)
+                  (Selector_px_nave nave)
+                  (Selector_py_nave nave)
+                  (Selector_velocidad_nave nave)
+                  (Selector_seed_nave nave)
+                  nuevoestado
+                  (Selector_angulo_nave nave)
+                  )
+      nave
+      )
+  )
+
+;Funcion  : Toma una estructura nave, un nuevo "angulo" y retorna una nueva nave con nuevo "angulo".
+;A.Entrada: Una estructura nave y un nuevo "angulo".
+;            
+;A.Salida : Nave con su posicion "angulo" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (nave->angulo nave nuevoangulo)
+  (if (and (nave? nave)
+           )
+      (create_nave(Selector_space_nave nave)
+                  (Selector_px_nave nave)
+                  (Selector_py_nave nave)
+                  (Selector_velocidad_nave nave)
+                  (Selector_seed_nave nave)
+                  (Selector_estadojuego_nave nave)
+                  nuevoangulo
+                  )
+      nave
+      )
+  )
+
+;-------------------------------------------------------------------------------------------------- F.VARIAS NAVE
+
+;Funcion  : Movimiento de la nave.
+;A.Entrada: Un space, un angulo, una velocidad y semilla distinta.
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+;FALTA VERIFICAR CON EL RESTO Y ENTREGAR EL SPACE
+(define (moveShip space angulo velocidad seed)
+  (nave->velocidad (nave->angulo (nave->py (nave->px (Selector_Nave space)
+                                                     (mod (+ (Selector_px_nave (Selector_Nave space))
+                                                             (round (* velocidad
+                                                                       (cos (Grad_Rad ( + (Selector_angulo_nave (Selector_Nave space))
+                                                                                          angulo
+                                                                                          )
+                                                                                      )
+                                                                            ) 
+                                                                       )
+                                                                    )
+                                                             )
+                                                          (Selector_N space)
+                                                          )
+                                                     )                      
+                                           (mod (+ (Selector_py_nave (Selector_Nave space))
+                                                   (round (* velocidad
+                                                             (sin (Grad_Rad ( + (Selector_angulo_nave (Selector_Nave space))
+                                                                                angulo
+                                                                                )
+                                                                            )
+                                                                  )
+                                                             )
+                                                          )
+                                                   )
+                                                (Selector_N space)
+                                                )
+                                           )
+                                 ( + (Selector_angulo_nave (Selector_Nave space))
+                                     angulo
+                                     )               
+                                 )
+                   (+ (Selector_velocidad_nave (Selector_Nave space))
+                      velocidad
+                      )    
+                   )
+  )
+
+;Funcion  : Convierte un numero de grados a radianes.
 ;A.Entrada: 
-;A.Salida :
-(define (init_asteroid  space px py angulo velocidad radio seed )
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Grad_Rad numero)
+  (/ (* pi numero) 180)
+  )
+
+;Funcion  : Convierte un numero de radianes a grados.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Rad_Grad numero)
+  (/ (* 180 numero) pi)
+  )
+
+;-------------------------------------------------------------------------------------------------------------FIN NAVE-------------
+
+
+
+;-------------------------------------------------------------------------------------------------- TDA ASTEROIDES
+;(init_asteroid  space px py angulo velocidad radio seed )
+
+;-------------------------------------------------------------------------------------------------- REPRESENTACION ASTEROIDE
+
+
+;-------------------------------------------------------------------------------------------------- CONSTRUCTOR ASTEROIDE
+;Funcion  : Construye un asteroide.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (create_Asteroide  space px py angulo velocidad radio seed )
   (if (and (integer? px)
            (integer? py)
-           (integer? velocidad)
+           (number?  angulo)
+           (number?  velocidad)
            (integer? seed)
            (integer? radio)
            )
-          (list space radio px py angulo velocidad seed)
-          null
-   )
- )
-;Funcion que 
+      (list space px py angulo velocidad radio seed)
+      null
+      )
+  )
+
+;Funcion  : Crea una lista de asteroides.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
 ;Funcion Recursiva? : 
 ;
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;Ejemplos:
 ;
 ;
 ;
-;A.Entrada: 
-;A.Salida :
  (define (create_Asteroides cantidad seed )
   (if (and (integer? cantidad)
            (integer? seed)
@@ -355,21 +548,373 @@
    )
  )
 
-;########################################################################
+;-------------------------------------------------------------------------------------------------- F. DE PERTENENCIA ASTEROIDE
 
+;Funcion  : Verifica si el argumento entregado corresponde a una estructura Asteroide.
+;A.Entrada: Una estructura Asteroide.
+;            
+;A.Salida : Booleano dependiedo si cumple con los rquesitos de una estructura Asteroide.
+;
+;Funcion Recursiva? : No
+;
+;Ejemplos:
+;         (create_Asteroide  sp1 5 4 0 1 2 134 )
+;
+;
+(define (Asteroide? posibleAsteroide)
+  (if (list? posibleAsteroide)
+      (if (= 7 (length posibleAsteroide))
+          (if (and
+               (integer? (car (cdr posibleAsteroide)))
+               (integer? (car (cdr (cdr posibleAsteroide))))
+               (number?  (car (cdr (cdr (cdr posibleAsteroide)))))
+               (number?  (car (cdr (cdr (cdr (cdr posibleAsteroide))))))
+               (integer? (car (cdr (cdr (cdr (cdr (cdr posibleAsteroide)))))))
+               (integer? (car (cdr (cdr (cdr (cdr (cdr (cdr posibleAsteroide))))))))
+               )
+              #t
+              #f
+              )
+          #f
+          )
+      #f
+      )
+  )
 
-
-;########################### TDA DISPAROS ###############################
-; - Representacion Disparo ----------------------------------------------
-;Funcion que 
+;-------------------------------------------------------------------------------------------------- SELECTORES ASTEROIDE -
+;(list space px py angulo velocidad radio seed)
+;Funcion  : Selecciona el space completo entregado a la estructura asteroide.
+;A.Entrada: Una estructura asteroide.
+;            
+;A.Salida : Space presente en la asteroide.
+;
 ;Funcion Recursiva? : 
 ;
-;Ejemplos( Primero la invocacion , luego de la flecha esta el resultado esperado de esta):
+;Ejemplos:
 ;
 ;
 ;
+(define (Selector_space_Asteroide Asteroide)
+  (if (Asteroide? Asteroide)
+      (car  Asteroide)
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente x del asteroide.
+;A.Entrada: Una estructura asteroide.
+;            
+;A.Salida : De ser asteroide retorna su componente x.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_px_Asteroide Asteroide)
+  (if (Asteroide? Asteroide)
+      (car (cdr Asteroide))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente y del Asteroide.
+;A.Entrada: Una estructura Asteroide.
+;            
+;A.Salida : De ser Asteroide retorna su componente y.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_py_Asteroide Asteroide)
+  (if (Asteroide? Asteroide)
+      (car (cdr (cdr Asteroide)))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente angulo del Asteroide.
+;A.Entrada: Una estructura Asteroide.
+;            
+;A.Salida : De ser Asteroide retorna su componente angulo.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_angulo_Asteroide Asteroide)
+  (if (Asteroide? Asteroide)
+      (car (cdr (cdr (cdr Asteroide))))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente velocidad del Asteroide.
+;A.Entrada: Una estructura Asteroide.
+;            
+;A.Salida : De ser Asteroide retorna su componente velocidad.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_velocidad_Asteroide Asteroide)
+  (if (Asteroide? Asteroide)
+      (car (cdr (cdr (cdr (cdr Asteroide)))))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente radio del Asteroide.
+;A.Entrada: Una estructura Asteroide.
+;            
+;A.Salida : De ser Asteroide retorna su componente radio.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_radio_Asteroide Asteroide)
+  (if (Asteroide? Asteroide)
+      (car (cdr (cdr (cdr (cdr (cdr Asteroide))))))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente seed del Asteroide.
+;A.Entrada: Una estructura Asteroide.
+;            
+;A.Salida : De ser Asteroide retorna su componente seed.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_seed_Asteroide Asteroide)
+  (if (Asteroide? Asteroide)
+      (car (cdr (cdr (cdr (cdr (cdr(cdr Asteroide)))))))
+      #f
+      )
+  )
+
+;-------------------------------------------------------------------------------------------------- MODIFICADORES ASTEROIDE -
+
+;Funcion  : Toma una estructura Asteroide, un nuevo space y retorna una nuevo Asteroide con nuevo space.
+;A.Entrada: Una estructura Asteroide y un nuevo space.
+;            
+;A.Salida : Asteroide con su space modificado
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Asteroide->space Asteroide nuevospace)
+  (if (and (Asteroide? Asteroide)
+           )
+      (create_Asteroide nuevospace
+                        (Selector_px_Asteroide Asteroide)
+                        (Selector_py_Asteroide Asteroide)
+                        (Selector_angulo_Asteroide Asteroide)
+                        (Selector_velocidad_Asteroide Asteroide)
+                        (Selector_radio_Asteroide Asteroide)
+                        (Selector_seed_Asteroide Asteroide)
+                        )
+      Asteroide
+      )
+  )
+
+;Funcion  : Toma una estructura Asteroide, un nuevo "x" y retorna un nuevo Asteroide con nuevo "x".
+;A.Entrada: Una estructura Asteroide y un nuevo "x".
+;            
+;A.Salida : Asteroide con su posicion "x" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Asteroide->px Asteroide nuevopx)
+  (if (and (Asteroide? Asteroide)
+           )
+      (create_Asteroide (Selector_space_Asteroide Asteroide)
+                        nuevopx
+                        (Selector_py_Asteroide Asteroide)
+                        (Selector_angulo_Asteroide Asteroide)
+                        (Selector_velocidad_Asteroide Asteroide)
+                        (Selector_radio_Asteroide Asteroide)
+                        (Selector_seed_Asteroide Asteroide)
+                        )
+      Asteroide
+      )
+  )
+
+;Funcion  : Toma una estructura Asteroide, un nuevo "y" y retorna un nuevo Asteroide con nuevo "y".
+;A.Entrada: Una estructura Asteroide y un nuevo "y".
+;            
+;A.Salida : Asteroide con su posicion "y" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Asteroide->py Asteroide nuevopy)
+  (if (and (Asteroide? Asteroide)
+           (< 0 nuevopy)
+           )
+      (create_Asteroide (Selector_space_Asteroide Asteroide)
+                        (Selector_px_Asteroide Asteroide)
+                        nuevopy
+                        (Selector_angulo_Asteroide Asteroide)
+                        (Selector_velocidad_Asteroide Asteroide)
+                        (Selector_radio_Asteroide Asteroide)
+                        (Selector_seed_Asteroide Asteroide)
+                        )
+      Asteroide
+      )
+  )
+
+;Funcion  : Toma una estructura Asteroide, un nuevo "angulo" y retorna un nuevo Asteroide con nuevo "angulo".
+;A.Entrada: Una estructura Asteroide y un nuevo "angulo".
+;            
+;A.Salida : Asteroide con su posicion "angulo" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Asteroide->angulo Asteroide nuevoangulo)
+  (if (and (Asteroide? Asteroide)
+           )
+      (create_Asteroide (Selector_space_Asteroide Asteroide)
+                        (Selector_px_Asteroide Asteroide)
+                        (Selector_py_Asteroide Asteroide)
+                        nuevoangulo
+                        (Selector_velocidad_Asteroide Asteroide)
+                        (Selector_radio_Asteroide Asteroide)
+                        (Selector_seed_Asteroide Asteroide)
+                        )
+      Asteroide
+      )
+  )
+
+;Funcion  : Toma una estructura Asteroide, una nueva "velocidad" y retorna un nuevo Asteroide con nuevo "velocidad".
+;A.Entrada: Una estructura Asteroide y una nueva "velocidad".
+;            
+;A.Salida : Asteroide con su posicion "velocidad" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Asteroide->velocidad Asteroide nuevavelocidad)
+  (if (and (Asteroide? Asteroide)
+           (number? nuevavelocidad)
+           )
+      (create_Asteroide (Selector_space_Asteroide Asteroide)
+                        (Selector_px_Asteroide Asteroide)
+                        (Selector_py_Asteroide Asteroide)
+                        (Selector_angulo_Asteroide Asteroide)
+                        nuevavelocidad
+                        (Selector_radio_Asteroide Asteroide)
+                        (Selector_seed_Asteroide Asteroide)
+                        )
+      Asteroide
+      )
+  )
+
+;Funcion  : Toma una estructura Asteroide, un nuevo "radio" y retorna un nuevo Asteroide con nuevo "radio".
+;A.Entrada: Una estructura Asteroide y un nuevo "radio".
+;            
+;A.Salida : Asteroide con su posicion "radio" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Asteroide->radio Asteroide nuevoradio)
+  (if (and (Asteroide? Asteroide)
+           )
+      (create_Asteroide (Selector_space_Asteroide Asteroide)
+                        (Selector_px_Asteroide Asteroide)
+                        (Selector_py_Asteroide Asteroide)
+                        (Selector_angulo_Asteroide Asteroide)
+                        (Selector_velocidad_Asteroide Asteroide)
+                        nuevoradio
+                        (Selector_seed_Asteroide Asteroide)
+                        )
+      Asteroide
+      )
+  )
+
+;Funcion  : Toma una estructura Asteroide, un nuevo "seed" y retorna un nuevo Asteroide con nuevo "seed".
+;A.Entrada: Una estructura Asteroide y un nuevo "seed".
+;            
+;A.Salida : Asteroide con su posicion "seed" modificada.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Asteroide->seed Asteroide nuevoseed)
+  (if (and (Asteroide? Asteroide)
+           )
+      (create_Asteroide (Selector_space_Asteroide Asteroide)
+                        (Selector_px_Asteroide Asteroide)
+                        (Selector_py_Asteroide Asteroide)
+                        (Selector_angulo_Asteroide Asteroide)
+                        (Selector_velocidad_Asteroide Asteroide)
+                        (Selector_radio_Asteroide Asteroide)
+                        nuevoseed
+                        )
+      Asteroide
+      )
+  )
+
+;-------------------------------------------------------------------------------------------------- F. VARIAS ASTEROIDES
+;-----------------------------------------------------------------------------------------------------------FIN ASTEROIDE------
+
+
+
+
+;-------------------------------------------------------------------------------------------------- TDA DISPARO
+;-------------------------------------------------------------------------------------------------- REPRESENTACION DISPARO
+;-------------------------------------------------------------------------------------------------- CONSTRUCTOR DISPARO
+;Funcion  : Construye un disparo.
 ;A.Entrada: 
-;A.Salida :
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
 (define (init_disparo space px py angulo velocidad pxf pyf largo seed)
   (if (and (integer? px)
            (integer? py)
@@ -379,13 +924,222 @@
            (integer? largo)
            (integer? seed)
            )
-          (list space px py pxf pyf angulo velocidad largo seed)
-          null
-   )
+      (list space px py pxf pyf angulo velocidad largo seed)
+      null
+      )
   
-)
+  )
 
-;########################################################################
-(define A (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12) ) )
+;-------------------------------------------------------------------------------------------------- F.DE PERTENENCIA DISPARO
+;-------------------------------------------------------------------------------------------------- SELECTORES DISPARO
+;-------------------------------------------------------------------------------------------------- MODIFICADORES DISPARO
+;-------------------------------------------------------------------------------------------------- F. VARIAS DISPARO
+;-------------------------------------------------------------------------------------------------------------FIN DISPARO------
 
-     
+
+
+
+;-------------------------------------------------------------------------------------------------- TDA SPACE RL
+;-------------------------------------------------------------------------------------------------- REPRESENTACION SPACE RL
+;'( '(N M A P L seed listatablero)
+;   '( '(nave) '(asteroides) '(disparos) )
+;   )
+
+;(list (list 20 30 4 5 8 3 (create_tablero_vacio 20 30 ))
+;      (list (create_nave  "space" 10 10 6 888 1 90) (list 1 "asteroides") (list 2 "disparos")) )
+
+;-------------------------------------------------------------------------------------------------- CONSTRUCTOR SPACE RL
+;Funcion  : Construye un space RL.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (create_SpaceRL N M A P L seed)
+  (if (and (integer? N)
+           (integer? M)
+           )
+      ;Creacion de la Matriz que representa el tablero
+      (create_tablero_vacio N M )
+      null
+      )
+  )
+
+;-------------------------------------------------------------------------------------------------- F.DE PERTENENCIA SPACE RL
+
+;-------------------------------------------------------------------------------------------------- SELECTORES SPACE RL
+;Funcion  : Selecciona la nave presente en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+
+(define (Selector_Nave space)
+  (car (car (cdr space)))
+ )
+
+;Funcion  : Selecciona la variable N presente en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_N space)
+  (car (car space))
+ )
+
+;Funcion  : Selecciona la variable M presente en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_M space)
+  (car (cdr (car space)))
+ )
+
+;-------------------------------------------------------------------------------------------------- MODIFICADORES SPACE RL
+
+;-------------------------------------------------------------------------------------------------- F. VARIAS SPACE RL
+;Funcion  : Crea una lista de "N" ceros para representar una fila vacia.
+;A.Entrada: Un entero que representa la cantidad de ceros en la fila.
+;            
+;A.Salida : Una lista llena de N ceros.
+;
+;Funcion Recursiva? : Si, se utiliza una R.Lineal, dado que me permite guardar
+; N ceros en una lista vacia entregada en el caso base.
+;Ejemplos:
+;         (create_fila_vacia 5)  -----> {0 0 0 0 0}
+;         (create_fila_vacia 1)  -----> {0}
+;         (create_fila_vacia 14) -----> {0 0 0 0 0 0 0 0 0 0 0 0 0 0}
+(define (create_fila_vacia N)
+  (if (= N 0)
+      (list)
+      (cons 0 (create_fila_vacia (- N 1)) )
+      )
+  )
+
+;Funcion  : Crea una matriz tablero de MxN vacio.
+;A.Entrada: Dos enteros que representan Columna (x Fila) ó (x e y) ó (M x N).
+;            
+;A.Salida : Una lista de listas llena de ceros (MxN).
+;
+;Funcion Recursiva? : Si, se utiliza R.Lineal, primer argumento de cons es una lista 
+; de N ceros. que se acopla M veces a la lista del caso base dando lugar a la Matriz MxN. 
+;Ejemplos:
+;         (create_tablero_vacio 5 3) -----> {{0 0 0} {0 0 0} {0 0 0} {0 0 0} {0 0 0}}
+;         (create_tablero_vacio 3 8) -----> {{0 0 0 0 0 0 0 0} {0 0 0 0 0 0 0 0} {0 0 0 0 0 0 0 0}}
+;         (create_tablero_vacio 4 4) -----> {{0 0 0 0} {0 0 0 0} {0 0 0 0} {0 0 0 0}}
+(define (create_tablero_vacio M N)
+  (if (or (string? M)
+          (string? N)
+          (list? M)
+          (list? N)
+          (< N 0)
+          (< M 0)  
+          )
+      (list)
+      (if (= M 0 )
+          (list)
+          (cons (create_fila_vacia N) (create_tablero_vacio (- M 1) N))
+          )
+      )
+  )
+
+;Funcion  : Selecciona una fila de el tablero.
+;A.Entrada: Space es una lista de listas de igual tamaño, py es un entero refiere a la posicion Y, 
+;           auxiliar que controla la recursion.
+;A.Salida : Lista que representa la fila seleccionada.
+;
+;Funcion Recursiva? : Si, se utiliza una R.de Cola ya que vamos acortando la lista original
+; con cdr y obtenemos la fila de interes con el car en la iteracion py-esima.
+;Ejemplos:
+;         Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 3 1) -----> {7 8 9}
+;         Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 2 1) -----> {4 5 6}
+;         Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_fila A 1 1) -----> {1 2 3} 
+(define (Selector_fila space py auxiliar)
+  (if (= auxiliar py)
+      (car space)
+      (Selector_fila (cdr space) py (+ auxiliar 1) )
+      )
+  )
+
+;Funcion  : Llamado simplificado de Selector_fila.
+;A.Entrada: Space es una lista de listas de igual tamaño, py es un entero refiere a la posicion Y.
+;            
+;A.Salida : Lista que representa la fila seleccionada.
+;
+;Funcion Recursiva? : NO.
+;
+;Ejemplos:
+;         Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Seleccion_posicion A 3) -----> {7 8 9}
+;         Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Seleccion_posicion A 2) -----> {4 5 6}
+;         Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Seleccion_posicion A 1) -----> {1 2 3}
+(define (Seleccion_posicion space py)
+  ( if (< 0 py)
+       (Selector_fila space py 1)
+       null
+       )
+  )
+
+;Funcion que selecciona un elemento, de una columna especifica, de una fila en el tablero.
+;A.Entrada: Matriz es una lista de listas, px entero que representa las columnas, py entero
+; que representa las filas.
+;A.Salida : Valor de la posicion buscada.
+;
+;Funcion Recursiva? : No.
+;Ejemplos (siempre de la forma columaxfila):
+;         Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_x_y A 3 3) -----> 9
+;         Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_x_y A 1 2) -----> 4
+;         Sea A: {{1 2 3} {4 5 6} {7 8 9} {10 11 12}}; (Selector_x_y A 2 3) -----> 8
+(define (Selector_x_y matriz px py)
+  ( if (and (< 0 py)
+            (< 0 px)
+            )
+       (Seleccion_posicion (Seleccion_posicion matriz py) px)
+       null
+       )
+  )
+
+;-------------------------------------------------------------------------------------------------------------FIN SPACE RL------
+
+
+
+
+
+;-------------------------------------------------------------------------------------------------- TDA SPACE RC
+;-------------------------------------------------------------------------------------------------- REPRESENTACION SPACE RC
+;-------------------------------------------------------------------------------------------------- CONSTRUCTOR SPACE RC
+;-------------------------------------------------------------------------------------------------- F.DE PERTENENCIA SPACE RC
+;-------------------------------------------------------------------------------------------------- SELECTORES SPACE RC
+;-------------------------------------------------------------------------------------------------- MODIFICADORES SPACE RL
+;-------------------------------------------------------------------------------------------------- F. VARIAS SPACE RC
+;-------------------------------------------------------------------------------------------------------------FIN SPACE RC------
+
+
+;#############################################################################################################ZONA PRUEBAS
+
+(define sp1 (list (list 20 30 4 5 8 3 (create_tablero_vacio 20 30 )) (list (create_nave  "space" 10 10 6 888 1 90) (list 1 "asteroides") (list 2 "disparos")) ))
+
+(define A (create_Asteroide  sp1 5 4 0 1 2 134 ) )    
