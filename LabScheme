@@ -498,11 +498,8 @@
 
 
 ;-------------------------------------------------------------------------------------------------- TDA ASTEROIDES
-;(init_asteroid  space px py angulo velocidad radio seed )
-
 ;-------------------------------------------------------------------------------------------------- REPRESENTACION ASTEROIDE
-
-
+;(init_asteroid  space px py angulo velocidad radio seed )
 ;-------------------------------------------------------------------------------------------------- CONSTRUCTOR ASTEROIDE
 ;Funcion  : Construye un asteroide.
 ;A.Entrada: 
@@ -527,26 +524,6 @@
       null
       )
   )
-
-;Funcion  : Crea una lista de asteroides.
-;A.Entrada: 
-;            
-;A.Salida : 
-;
-;Funcion Recursiva? : 
-;
-;Ejemplos:
-;
-;
-;
- (define (create_Asteroides cantidad seed )
-  (if (and (integer? cantidad)
-           (integer? seed)
-           )
-          (list (list 1 2 4 60 15 1222) ( list 2 8  4 60 15 1222) (list 6 7 6 25 2 1222))
-          null
-   )
- )
 
 ;-------------------------------------------------------------------------------------------------- F. DE PERTENENCIA ASTEROIDE
 
@@ -903,6 +880,7 @@
 
 ;-------------------------------------------------------------------------------------------------- TDA DISPARO
 ;-------------------------------------------------------------------------------------------------- REPRESENTACION DISPARO
+;(init_disparo space px py angulo velocidad pxf pyf largo seed)
 ;-------------------------------------------------------------------------------------------------- CONSTRUCTOR DISPARO
 ;Funcion  : Construye un disparo.
 ;A.Entrada: 
@@ -931,16 +909,22 @@
   )
 
 ;-------------------------------------------------------------------------------------------------- F.DE PERTENENCIA DISPARO
+(define (disparo? disparo)
+  null
+  )
 ;-------------------------------------------------------------------------------------------------- SELECTORES DISPARO
 ;-------------------------------------------------------------------------------------------------- MODIFICADORES DISPARO
 ;-------------------------------------------------------------------------------------------------- F. VARIAS DISPARO
+(define (Shoot space velocidad seed)
+  null
+  )
 ;-------------------------------------------------------------------------------------------------------------FIN DISPARO------
 
 
 
 
-;-------------------------------------------------------------------------------------------------- TDA SPACE RL
-;-------------------------------------------------------------------------------------------------- REPRESENTACION SPACE RL
+;-------------------------------------------------------------------------------------------------- TDA SPACE 
+;-------------------------------------------------------------------------------------------------- REPRESENTACION SPACE 
 ;'( '(N M A P L seed listatablero)
 ;   '( '(nave) '(asteroides) '(disparos) )
 ;   )
@@ -948,8 +932,8 @@
 ;(list (list 20 30 4 5 8 3 (create_tablero_vacio 20 30 ))
 ;      (list (create_nave  "space" 10 10 6 888 1 90) (list 1 "asteroides") (list 2 "disparos")) )
 
-;-------------------------------------------------------------------------------------------------- CONSTRUCTOR SPACE RL
-;Funcion  : Construye un space RL.
+;-------------------------------------------------------------------------------------------------- CONSTRUCTOR SPACE 
+;Funcion  : Construye un space.
 ;A.Entrada: 
 ;            
 ;A.Salida : 
@@ -960,34 +944,58 @@
 ;
 ;
 ;
-(define (create_SpaceRL N M A P L seed)
+(define (create_Space N M A P L seed tablero nave asteroides disparos)
   (if (and (integer? N)
+           (< 1 N)
            (integer? M)
+           (< 1 N)
+           (integer? A)
+           (< 0 A)
+           (number? L)
+           (integer? seed)
+           (list? tablero)
+           (nave? nave)
+           (list? asteroides)
+           (list? disparos)
            )
       ;Creacion de la Matriz que representa el tablero
-      (create_tablero_vacio N M )
-      null
+      (list (list N M A P L seed (create_tablero_vacio N M ))
+            (list nave asteroides disparos) )
+      (list)
       )
   )
 
-;-------------------------------------------------------------------------------------------------- F.DE PERTENENCIA SPACE RL
-
-;-------------------------------------------------------------------------------------------------- SELECTORES SPACE RL
-;Funcion  : Selecciona la nave presente en el tda Space.
-;A.Entrada: 
-;            
-;A.Salida : 
-;
-;Funcion Recursiva? : 
-;
-;Ejemplos:
-;
-;
-;
-
-(define (Selector_Nave space)
-  (car (car (cdr space)))
+;-------------------------------------------------------------------------------------------------- F.DE PERTENENCIA SPACE
+(define (CheckSpace posiblespace)
+  (if (list? posiblespace)
+      (if (= 2 (length posiblespace))
+          (if (and
+               (integer? (car (car posiblespace)))                                       ; N
+               (< 0 (car (car posiblespace)))                                            ; N mayor a 0
+               (integer? (car (car posiblespace)))                                       ; M
+               (< 0 (car (car posiblespace)))                                            ; M mayor que 0
+               (integer? (car (cdr (cdr (car posiblespace)))))                           ; A
+               (< 0      (car (cdr (cdr (car posiblespace)))))                           ; Cantidad de asteroides mayor a 0
+               (integer? (car (cdr (cdr (cdr (car posiblespace))))))                     ; P
+               (< 0      (car (cdr (cdr (cdr (car posiblespace))))))                     ; P mayor que 0
+               (number?  (car (cdr (cdr (cdr (cdr (car posiblespace)))))))               ; L
+               (integer? (car (cdr (cdr (cdr (cdr (cdr(car posiblespace))))))))          ; Seed
+               (list?    (car (cdr (cdr (cdr (cdr (cdr (cdr (car posiblespace)))))))))   ; Tablero
+               (nave?    (car (car (cdr posiblespace))))                                 ; Nave
+               (list?    (car (cdr (car (cdr posiblespace)))))                           ; Asteroides
+               (list?    (car (cdr (cdr (car (cdr posiblespace))))))                     ; Disparos
+               )
+              #t
+              #f
+              )
+          #f
+          )
+      #f
+      )
  )
+
+;-------------------------------------------------------------------------------------------------- SELECTORES SPACE 
+
 
 ;Funcion  : Selecciona la variable N presente en el tda Space.
 ;A.Entrada: 
@@ -1019,9 +1027,385 @@
   (car (cdr (car space)))
  )
 
-;-------------------------------------------------------------------------------------------------- MODIFICADORES SPACE RL
+;Funcion  : Selecciona la variable A presente en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_A space)
+  (car (cdr (cdr (car space))))
+ )
 
-;-------------------------------------------------------------------------------------------------- F. VARIAS SPACE RL
+;Funcion  : Selecciona la variable P presente en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_P space)
+  (car (cdr (cdr (cdr (car space)))))
+ )
+
+;Funcion  : Selecciona la variable L presente en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_L space)
+  (car (cdr (cdr (cdr (cdr (car space))))))
+ )
+
+;Funcion  : Selecciona la variable L presente en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_seed space)
+  (car (cdr (cdr (cdr (cdr (cdr(car space)))))))
+ )
+
+;Funcion  : Selecciona la variable tablero presente en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_tablero space)
+  (car (cdr (cdr (cdr (cdr (cdr (cdr(car space))))))))
+ )
+
+
+
+;Funcion  : Selecciona la nave presente en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_Nave space)
+  (car (car (cdr space)))
+ )
+
+;Funcion  : Selecciona los asteroides presentes en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_Asteroides space)
+  (car (cdr (car (cdr space))))
+ )
+
+;Funcion  : Selecciona los Disparos presente en el tda Space.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_Disparos space)
+  (car (cdr (cdr (car (cdr space)))))
+ )
+
+;-------------------------------------------------------------------------------------------------- MODIFICADORES SPACE 
+
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (space->N space nuevoN )
+  (create_Space   nuevoN
+                  (Selector_M space)
+                  (Selector_A space)
+                  (Selector_P space)
+                  (Selector_L space)
+                  (Selector_seed space)
+                  (Selector_tablero space)
+                  (Selector_Nave space)
+                  (Selector_Asteroides space)
+                  (Selector_Disparos space)
+                  )
+                  
+ )
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (space->M space nuevoM )
+  (create_Space   (Selector_N space)
+                  nuevoM
+                  (Selector_A space)
+                  (Selector_P space)
+                  (Selector_L space)
+                  (Selector_seed space)
+                  (Selector_tablero space)
+                  (Selector_Nave space)
+                  (Selector_Asteroides space)
+                  (Selector_Disparos space)
+                  )
+                  
+ )
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (space->A space nuevoA )
+  (create_Space   (Selector_N space)
+                  (Selector_M space)
+                  nuevoA
+                  (Selector_P space)
+                  (Selector_L space)
+                  (Selector_seed space)
+                  (Selector_tablero space)
+                  (Selector_Nave space)
+                  (Selector_Asteroides space)
+                  (Selector_Disparos space)
+                  )
+                  
+ )
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (space->P space nuevoP )
+  (create_Space   (Selector_N space)
+                  (Selector_M space)
+                  (Selector_A space)
+                  nuevoP
+                  (Selector_L space)
+                  (Selector_seed space)
+                  (Selector_tablero space)
+                  (Selector_Nave space)
+                  (Selector_Asteroides space)
+                  (Selector_Disparos space)
+                  )
+                  
+ )
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (space->L space nuevoL )
+  (create_Space   (Selector_N space)
+                  (Selector_M space)
+                  (Selector_A space)
+                  (Selector_P space)
+                  nuevoL
+                  (Selector_seed space)
+                  (Selector_tablero space)
+                  (Selector_Nave space)
+                  (Selector_Asteroides space)
+                  (Selector_Disparos space)
+                  )
+                  
+ )
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (space->seed space nuevaseed )
+  (create_Space   (Selector_N space)
+                  (Selector_M space)
+                  (Selector_A space)
+                  (Selector_P space)
+                  (Selector_L space)
+                  nuevaseed
+                  (Selector_tablero space)
+                  (Selector_Nave space)
+                  (Selector_Asteroides space)
+                  (Selector_Disparos space)
+                  )
+                  
+ )
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (space->tablero space nuevotablero  )
+  (create_Space   (Selector_N space)
+                  (Selector_M space)
+                  (Selector_A space)
+                  (Selector_P space)
+                  (Selector_L space)
+                  (Selector_seed space)
+                  nuevotablero
+                  (Selector_Nave space)
+                  (Selector_Asteroides space)
+                  (Selector_Disparos space)
+                  )
+                  
+ )
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (space->Nave space nuevaNave )
+  (create_Space   (Selector_N space)
+                  (Selector_M space)
+                  (Selector_A space)
+                  (Selector_P space)
+                  (Selector_L space)
+                  (Selector_seed space)
+                  (Selector_tablero space)
+                  nuevaNave
+                  (Selector_Asteroides space)
+                  (Selector_Disparos space)
+                  )
+                  
+ )
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (space->Asteroides space nuevosAsteroides )
+  (create_Space   (Selector_N space)
+                  (Selector_M space)
+                  (Selector_A space)
+                  (Selector_P space)
+                  (Selector_L space)
+                  (Selector_seed space)
+                  (Selector_tablero space)
+                  (Selector_Nave space)
+                  nuevosAsteroides
+                  (Selector_Disparos space)
+                  )
+                  
+ )
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (space->Disparos space nuevosDisparos )
+  (create_Space   (Selector_N space)
+                  (Selector_M space)
+                  (Selector_A space)
+                  (Selector_P space)
+                  (Selector_L space)
+                  (Selector_seed space)
+                  (Selector_tablero space)
+                  (Selector_Nave space)
+                  (Selector_Asteroides space)
+                  nuevosDisparos
+                  )
+                  
+ )
+
+
+
+;-------------------------------------------------------------------------------------------------- F. VARIAS SPACE 
 ;Funcion  : Crea una lista de "N" ceros para representar una fila vacia.
 ;A.Entrada: Un entero que representa la cantidad de ceros en la fila.
 ;            
@@ -1105,6 +1489,7 @@
 
 ;Funcion que selecciona un elemento, de una columna especifica, de una fila en el tablero.
 ;A.Entrada: Matriz es una lista de listas, px entero que representa las columnas, py entero
+
 ; que representa las filas.
 ;A.Salida : Valor de la posicion buscada.
 ;
@@ -1122,19 +1507,65 @@
        )
   )
 
-;-------------------------------------------------------------------------------------------------------------FIN SPACE RL------
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Update_Space seed)
+  null
+ )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Demo_lazy space seed)
+  null
+ )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Space->String space resultado)
+   (display (Selector_tablero space))
+ )
+
+;-------------------------------------------------------------------------------------------------------------FIN TDA SPACE------
 
 
 
+;-------------------------------------------------------------------------------------------------- CREATESPACE RL
+(define (createSpaceRL N M A P L seed)
+  (list (list 20 30 4 5 8 3 (create_tablero_vacio 20 30 )) (list (create_nave  "space" 10 10 6 888 1 90) (list 1 "asteroides") (list 2 "disparos")) )
+  
+  )
+;-------------------------------------------------------------------------------------------------------------FIN SPACE RC------
 
 
-;-------------------------------------------------------------------------------------------------- TDA SPACE RC
-;-------------------------------------------------------------------------------------------------- REPRESENTACION SPACE RC
-;-------------------------------------------------------------------------------------------------- CONSTRUCTOR SPACE RC
-;-------------------------------------------------------------------------------------------------- F.DE PERTENENCIA SPACE RC
-;-------------------------------------------------------------------------------------------------- SELECTORES SPACE RC
-;-------------------------------------------------------------------------------------------------- MODIFICADORES SPACE RL
-;-------------------------------------------------------------------------------------------------- F. VARIAS SPACE RC
+;-------------------------------------------------------------------------------------------------- CREATESPACE RC
+
 ;-------------------------------------------------------------------------------------------------------------FIN SPACE RC------
 
 
@@ -1142,4 +1573,4 @@
 
 (define sp1 (list (list 20 30 4 5 8 3 (create_tablero_vacio 20 30 )) (list (create_nave  "space" 10 10 6 888 1 90) (list 1 "asteroides") (list 2 "disparos")) ))
 
-(define A (create_Asteroide  sp1 5 4 0 1 2 134 ) )    
+(define A (create_Asteroide  sp1 5 4 0 1 2 134 ) )
