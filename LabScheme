@@ -9,6 +9,7 @@
 (define a 2)
 (define c 0)
 (define m 9)
+(define radionave 1)
 (define pi 3.1415926535897932384626433832795028841)
 ;Esta función random tuma un xn y obtiene el xn+1 de la secuencia de números aleatorios.
 (define myRandom
@@ -426,41 +427,81 @@
 ;
 ;FALTA VERIFICAR CON EL RESTO Y ENTREGAR EL SPACE
 (define (moveShip space angulo velocidad seed)
-  (nave->velocidad (nave->angulo (nave->py (nave->px (Selector_Nave space)
-                                                     (mod (+ (Selector_px_nave (Selector_Nave space))
-                                                             (round (* velocidad
-                                                                       (cos (Grad_Rad ( + (Selector_angulo_nave (Selector_Nave space))
-                                                                                          angulo
+  (if (ComparacionNave (Selector_Asteroides space)
+                       (nave->velocidad (nave->angulo (nave->py (nave->px (Selector_Nave space)
+                                                                          (mod (+ (Selector_px_nave (Selector_Nave space))
+                                                                                  (round (* velocidad
+                                                                                            (cos (Grad_Rad ( + (Selector_angulo_nave (Selector_Nave space))
+                                                                                                               angulo
+                                                                                                               )
+                                                                                                           )
+                                                                                                 ) 
+                                                                                            )
+                                                                                         )
+                                                                                  )
+                                                                               (Selector_N space)
+                                                                               )
+                                                                          )                      
+                                                                (mod (+ (Selector_py_nave (Selector_Nave space))
+                                                                        (round (* velocidad
+                                                                                  (sin (Grad_Rad ( + (Selector_angulo_nave (Selector_Nave space))
+                                                                                                     angulo
+                                                                                                     )
+                                                                                                 )
+                                                                                       )
+                                                                                  )
+                                                                               )
+                                                                        )
+                                                                     (Selector_N space)
+                                                                     )
+                                                                )
+                                                      ( + (Selector_angulo_nave (Selector_Nave space))
+                                                          angulo
+                                                          )               
+                                                      )
+                                        (+ (Selector_velocidad_nave (Selector_Nave space))
+                                           velocidad
+                                           )    
+                                        )
+                       radionave)
+      (display "DEFEAT")
+      (nave->velocidad (nave->angulo (nave->py (nave->px (Selector_Nave space)
+                                                         (mod (+ (Selector_px_nave (Selector_Nave space))
+                                                                 (round (* velocidad
+                                                                           (cos (Grad_Rad ( + (Selector_angulo_nave (Selector_Nave space))
+                                                                                              angulo
+                                                                                              )
                                                                                           )
-                                                                                      )
-                                                                            ) 
-                                                                       )
-                                                                    )
-                                                             )
-                                                          (Selector_N space)
-                                                          )
-                                                     )                      
-                                           (mod (+ (Selector_py_nave (Selector_Nave space))
-                                                   (round (* velocidad
-                                                             (sin (Grad_Rad ( + (Selector_angulo_nave (Selector_Nave space))
-                                                                                angulo
+                                                                                ) 
+                                                                           )
+                                                                        )
+                                                                 )
+                                                              (Selector_N space)
+                                                              )
+                                                         )                      
+                                               (mod (+ (Selector_py_nave (Selector_Nave space))
+                                                       (round (* velocidad
+                                                                 (sin (Grad_Rad ( + (Selector_angulo_nave (Selector_Nave space))
+                                                                                    angulo
+                                                                                    )
                                                                                 )
-                                                                            )
-                                                                  )
-                                                             )
-                                                          )
-                                                   )
-                                                (Selector_N space)
-                                                )
-                                           )
-                                 ( + (Selector_angulo_nave (Selector_Nave space))
-                                     angulo
-                                     )               
-                                 )
-                   (+ (Selector_velocidad_nave (Selector_Nave space))
-                      velocidad
-                      )    
-                   )
+                                                                      )
+                                                                 )
+                                                              )
+                                                       )
+                                                    (Selector_N space)
+                                                    )
+                                               )
+                                     ( + (Selector_angulo_nave (Selector_Nave space))
+                                         angulo
+                                         )               
+                                     )
+                       (+ (Selector_velocidad_nave (Selector_Nave space))
+                          velocidad
+                          )    
+                       )      
+      )
+  
   )
 
 ;Funcion  : Convierte un numero de grados a radianes.
@@ -879,6 +920,7 @@
 
 
 ;-------------------------------------------------------------------------------------------------- TDA DISPARO
+;(list         space px py velocidad seed estadoJuego angulo)
 ;-------------------------------------------------------------------------------------------------- REPRESENTACION DISPARO
 ;(init_disparo space px py angulo velocidad pxf pyf largo seed)
 ;-------------------------------------------------------------------------------------------------- CONSTRUCTOR DISPARO
@@ -893,27 +935,462 @@
 ;
 ;
 ;
-(define (init_disparo space px py angulo velocidad pxf pyf largo seed)
+(define (create_disparo space px py angulo velocidad pxf pyf largo seed)
   (if (and (integer? px)
+           (list? space)
            (integer? py)
            (integer? pxf)
            (integer? pyf)
-           (integer? velocidad)
-           (integer? largo)
+           (number? velocidad)
+           (number? largo)
            (integer? seed)
            )
-      (list space px py pxf pyf angulo velocidad largo seed)
+      (list space px py angulo velocidad pxf pyf largo seed)
       null
       )
   
   )
 
 ;-------------------------------------------------------------------------------------------------- F.DE PERTENENCIA DISPARO
-(define (disparo? disparo)
-  null
+(define (disparo? posibledisparo)
+  (if (list? posibledisparo)
+      (if (= 2 (length posibledisparo))
+          (if (and
+               (list?    (car  posibledisparo));space
+               (integer? (car (cdr posibledisparo)));px
+               (integer? (car (cdr (cdr posibledisparo))));py
+               (number? (car (cdr (cdr (cdr posibledisparo)))));angulo
+               (number? (car (cdr (cdr (cdr (cdr posibledisparo))))));velocidad
+               (integer? (car (cdr (cdr (cdr (cdr (cdr posibledisparo)))))));pxf
+               (integer? (car (cdr (cdr (cdr (cdr (cdr (cdr posibledisparo))))))));pyf
+               (number? (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr posibledisparo)))))))));largo
+               (integer? (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr posibledisparo))))))))));seed
+               )
+              #t
+              #f
+              )
+          #f
+          )
+      #f
+      )
   )
 ;-------------------------------------------------------------------------------------------------- SELECTORES DISPARO
+;Funcion  : Selecciona el space completo entregado a la estructura disparo.
+;A.Entrada: Una estructura disparo.
+;            
+;A.Salida : Space presente en la disparo.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_space_disparo disparo)
+  (if (disparo? disparo)
+      (car  disparo)
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente x del disparo.
+;A.Entrada: Una estructura disparo.
+;            
+;A.Salida : De ser disparo retorna su componente x.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_px_disparo disparo)
+  (if (disparo? disparo)
+      (car (cdr disparo))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente y del disparo.
+;A.Entrada: Una estructura disparo.
+;            
+;A.Salida : De ser disparo retorna su componente y.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_py_disparo disparo)
+  (if (disparo? disparo)
+      (car (cdr (cdr disparo)))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente angulo del disparo.
+;A.Entrada: Una estructura disparo.
+;            
+;A.Salida : De ser disparo retorna su componente angulo.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_angulo_disparo disparo)
+  (if (disparo? disparo)
+      (car (cdr (cdr (cdr disparo))))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente velocidad del disparo.
+;A.Entrada: Una estructura disparo.
+;            
+;A.Salida : De ser disparo retorna su componente velocidad.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_velocidad_disparo disparo)
+  (if (disparo? disparo)
+      (car (cdr (cdr (cdr (cdr disparo)))))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente 'posicion "x" final' del disparo.
+;A.Entrada: Una estructura disparo.
+;            
+;A.Salida : De ser disparo retorna su componente 'posicion "x" final'.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_pxf_disparo disparo)
+  (if (disparo? disparo)
+      (car (cdr (cdr (cdr (cdr (cdr disparo))))))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente 'posicion "y" final' del disparo.
+;A.Entrada: Una estructura disparo.
+;            
+;A.Salida : De ser disparo retorna su componente 'posicion "y" final'.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_pyf_disparo disparo)
+  (if (disparo? disparo)
+      (car (cdr (cdr (cdr (cdr (cdr(cdr disparo)))))))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente largo del disparo.
+;A.Entrada: Una estructura disparo.
+;            
+;A.Salida : De ser disparo retorna su componente largo.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_largo_disparo disparo)
+  (if (disparo? disparo)
+      (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr disparo))))))))
+      #f
+      )
+  )
+
+;Funcion  : Selecciona componente seed del disparo.
+;A.Entrada: Una estructura disparo.
+;            
+;A.Salida : De ser disparo retorna su componente seed.
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Selector_seed_disparo disparo)
+  (if (disparo? disparo)
+      (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr disparo)))))))))
+      #f
+      )
+  )
+
 ;-------------------------------------------------------------------------------------------------- MODIFICADORES DISPARO
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Disparo->space disparo nuevospace)
+  (if (and (disparo? disparo)
+           )
+      (create_disparo   nuevospace
+                        (Selector_px_disparo disparo)
+                        (Selector_py_disparo disparo)
+                        (Selector_angulo_disparo disparo)
+                        (Selector_velocidad_disparo disparo)
+                        (Selector_pxf_disparo disparo)
+                        (Selector_pyf_disparo disparo)
+                        (Selector_largo_disparo disparo)
+                        (Selector_seed_disparo disparo)
+                        )
+      disparo
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Disparo->px disparo nuevopx)
+  (if (and (disparo? disparo)
+           )
+      (create_disparo   (Selector_space_disparo disparo)
+                        nuevopx
+                        (Selector_py_disparo disparo)
+                        (Selector_angulo_disparo disparo)
+                        (Selector_velocidad_disparo disparo)
+                        (Selector_pxf_disparo disparo)
+                        (Selector_pyf_disparo disparo)
+                        (Selector_largo_disparo disparo)
+                        (Selector_seed_disparo disparo)
+                        )
+      disparo
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Disparo->py disparo nuevopy)
+  (if (and (disparo? disparo)
+           )
+      (create_disparo   (Selector_space_disparo disparo)
+                        (Selector_px_disparo disparo)
+                        nuevopy
+                        (Selector_angulo_disparo disparo)
+                        (Selector_velocidad_disparo disparo)
+                        (Selector_pxf_disparo disparo)
+                        (Selector_pyf_disparo disparo)
+                        (Selector_largo_disparo disparo)
+                        (Selector_seed_disparo disparo)
+                        )
+      disparo
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Disparo->angulo disparo nuevoangulo)
+  (if (and (disparo? disparo)
+           )
+      (create_disparo   (Selector_space_disparo disparo)
+                        (Selector_px_disparo disparo)
+                        (Selector_py_disparo disparo)
+                        nuevoangulo
+                        (Selector_velocidad_disparo disparo)
+                        (Selector_pxf_disparo disparo)
+                        (Selector_pyf_disparo disparo)
+                        (Selector_largo_disparo disparo)
+                        (Selector_seed_disparo disparo)
+                        )
+      disparo
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Disparo->velocidad disparo nuevovelocidad)
+  (if (and (disparo? disparo)
+           )
+      (create_disparo (Selector_space_disparo disparo)
+                        (Selector_px_disparo disparo)
+                        (Selector_py_disparo disparo)
+                        (Selector_angulo_disparo disparo)
+                        nuevovelocidad
+                        (Selector_pxf_disparo disparo)
+                        (Selector_pyf_disparo disparo)
+                        (Selector_largo_disparo disparo)
+                        (Selector_seed_disparo disparo)
+                        )
+      disparo
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Disparo->pxf disparo nuevopxf)
+  (if (and (disparo? disparo)
+           )
+      (create_disparo   (Selector_space_disparo disparo)
+                        (Selector_px_disparo disparo)
+                        (Selector_py_disparo disparo)
+                        (Selector_angulo_disparo disparo)
+                        (Selector_velocidad_disparo disparo)
+                        nuevopxf
+                        (Selector_pyf_disparo disparo)
+                        (Selector_largo_disparo disparo)
+                        (Selector_seed_disparo disparo)
+                        )
+      disparo
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Disparo->pyf disparo nuevopyf)
+  (if (and (disparo? disparo)
+           )
+      (create_disparo   (Selector_space_disparo disparo)
+                        (Selector_px_disparo disparo)
+                        (Selector_py_disparo disparo)
+                        (Selector_angulo_disparo disparo)
+                        (Selector_velocidad_disparo disparo)
+                        (Selector_pxf_disparo disparo)
+                        nuevopyf
+                        (Selector_largo_disparo disparo)
+                        (Selector_seed_disparo disparo)
+                        )
+      disparo
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Disparo->largo disparo nuevolargo)
+  (if (and (disparo? disparo)
+           )
+      (create_disparo   (Selector_space_disparo disparo)
+                        (Selector_px_disparo disparo)
+                        (Selector_py_disparo disparo)
+                        (Selector_angulo_disparo disparo)
+                        (Selector_velocidad_disparo disparo)
+                        (Selector_pxf_disparo disparo)
+                        (Selector_pyf_disparo disparo)
+                        nuevolargo
+                        (Selector_seed_disparo disparo)
+                        )
+      disparo
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Disparo->seed disparo nuevoseed)
+  (if (and (disparo? disparo)
+           )
+      (create_disparo   (Selector_space_disparo disparo)
+                        (Selector_px_disparo disparo)
+                        (Selector_py_disparo disparo)
+                        (Selector_angulo_disparo disparo)
+                        (Selector_velocidad_disparo disparo)
+                        (Selector_pxf_disparo disparo)
+                        (Selector_pyf_disparo disparo)
+                        (Selector_largo_disparo disparo)
+                        nuevoseed
+                        )
+      disparo
+      )
+  )
+
 ;-------------------------------------------------------------------------------------------------- F. VARIAS DISPARO
 (define (Shoot space velocidad seed)
   null
@@ -946,12 +1423,15 @@
 ;
 (define (create_Space N M A P L seed tablero nave asteroides disparos)
   (if (and (integer? N)
-           (< 1 N)
+           (< 0 N)
            (integer? M)
-           (< 1 N)
+           (< 0 M)
            (integer? A)
            (< 0 A)
+           (number? P)
+           (< 0 P)
            (number? L)
+           (< 0 L)
            (integer? seed)
            (list? tablero)
            (nave? nave)
@@ -1009,8 +1489,11 @@
 ;
 ;
 (define (Selector_N space)
-  (car (car space))
- )
+  (if (CheckSpace space)
+      (car (car space))
+      null
+      )
+  )
 
 ;Funcion  : Selecciona la variable M presente en el tda Space.
 ;A.Entrada: 
@@ -1024,8 +1507,11 @@
 ;
 ;
 (define (Selector_M space)
-  (car (cdr (car space)))
- )
+  (if (CheckSpace space)
+      (car (cdr (car space)))
+      null
+      )
+  )
 
 ;Funcion  : Selecciona la variable A presente en el tda Space.
 ;A.Entrada: 
@@ -1039,8 +1525,11 @@
 ;
 ;
 (define (Selector_A space)
-  (car (cdr (cdr (car space))))
- )
+  (if (CheckSpace space)
+      (car (cdr (cdr (car space))))
+      null
+      )
+  )
 
 ;Funcion  : Selecciona la variable P presente en el tda Space.
 ;A.Entrada: 
@@ -1054,8 +1543,11 @@
 ;
 ;
 (define (Selector_P space)
-  (car (cdr (cdr (cdr (car space)))))
- )
+  (if (CheckSpace space)
+      (car (cdr (cdr (cdr (car space)))))
+      null
+      )
+  )
 
 ;Funcion  : Selecciona la variable L presente en el tda Space.
 ;A.Entrada: 
@@ -1069,8 +1561,11 @@
 ;
 ;
 (define (Selector_L space)
-  (car (cdr (cdr (cdr (cdr (car space))))))
- )
+  (if (CheckSpace space)
+      (car (cdr (cdr (cdr (cdr (car space))))))
+      null
+      )
+  )
 
 ;Funcion  : Selecciona la variable L presente en el tda Space.
 ;A.Entrada: 
@@ -1084,8 +1579,11 @@
 ;
 ;
 (define (Selector_seed space)
-  (car (cdr (cdr (cdr (cdr (cdr(car space)))))))
- )
+  (if (CheckSpace space)
+      (car (cdr (cdr (cdr (cdr (cdr(car space)))))))
+      null
+      )
+  )
 
 ;Funcion  : Selecciona la variable tablero presente en el tda Space.
 ;A.Entrada: 
@@ -1099,8 +1597,11 @@
 ;
 ;
 (define (Selector_tablero space)
-  (car (cdr (cdr (cdr (cdr (cdr (cdr(car space))))))))
- )
+  (if (CheckSpace space)
+      (car (cdr (cdr (cdr (cdr (cdr (cdr(car space))))))))
+      null
+      )
+  )
 
 
 
@@ -1116,8 +1617,11 @@
 ;
 ;
 (define (Selector_Nave space)
-  (car (car (cdr space)))
- )
+  (if (CheckSpace space)
+      (car (car (cdr space)))
+      null
+      )
+  )
 
 ;Funcion  : Selecciona los asteroides presentes en el tda Space.
 ;A.Entrada: 
@@ -1131,8 +1635,11 @@
 ;
 ;
 (define (Selector_Asteroides space)
-  (car (cdr (car (cdr space))))
- )
+  (if (CheckSpace space)
+      (car (cdr (car (cdr space))))
+      null
+      )
+  )
 
 ;Funcion  : Selecciona los Disparos presente en el tda Space.
 ;A.Entrada: 
@@ -1146,8 +1653,11 @@
 ;
 ;
 (define (Selector_Disparos space)
-  (car (cdr (cdr (car (cdr space)))))
- )
+  (if (CheckSpace space)
+      (car (cdr (cdr (car (cdr space)))))
+      null
+      )        
+  )
 
 ;-------------------------------------------------------------------------------------------------- MODIFICADORES SPACE 
 
@@ -1164,19 +1674,22 @@
 ;
 ;
 (define (space->N space nuevoN )
-  (create_Space   nuevoN
-                  (Selector_M space)
-                  (Selector_A space)
-                  (Selector_P space)
-                  (Selector_L space)
-                  (Selector_seed space)
-                  (Selector_tablero space)
-                  (Selector_Nave space)
-                  (Selector_Asteroides space)
-                  (Selector_Disparos space)
-                  )
+  (if (CheckSpace space)
+      (create_Space   nuevoN
+                      (Selector_M space)
+                      (Selector_A space)
+                      (Selector_P space)
+                      (Selector_L space)
+                      (Selector_seed space)
+                      (Selector_tablero space)
+                      (Selector_Nave space)
+                      (Selector_Asteroides space)
+                      (Selector_Disparos space)
+                      )
+      space
+      )
                   
- )
+  )
 ;Funcion  : 
 ;A.Entrada: 
 ;            
@@ -1189,19 +1702,21 @@
 ;
 ;
 (define (space->M space nuevoM )
-  (create_Space   (Selector_N space)
-                  nuevoM
-                  (Selector_A space)
-                  (Selector_P space)
-                  (Selector_L space)
-                  (Selector_seed space)
-                  (Selector_tablero space)
-                  (Selector_Nave space)
-                  (Selector_Asteroides space)
-                  (Selector_Disparos space)
-                  )
-                  
- )
+  (if (CheckSpace space)
+      (create_Space   (Selector_N space)
+                      nuevoM
+                      (Selector_A space)
+                      (Selector_P space)
+                      (Selector_L space)
+                      (Selector_seed space)
+                      (Selector_tablero space)
+                      (Selector_Nave space)
+                      (Selector_Asteroides space)
+                      (Selector_Disparos space)
+                      )
+      space
+      )               
+  )
 ;Funcion  : 
 ;A.Entrada: 
 ;            
@@ -1214,19 +1729,22 @@
 ;
 ;
 (define (space->A space nuevoA )
-  (create_Space   (Selector_N space)
-                  (Selector_M space)
-                  nuevoA
-                  (Selector_P space)
-                  (Selector_L space)
-                  (Selector_seed space)
-                  (Selector_tablero space)
-                  (Selector_Nave space)
-                  (Selector_Asteroides space)
-                  (Selector_Disparos space)
-                  )
-                  
- )
+  (if (CheckSpace space)
+      (create_Space   (Selector_N space)
+                      (Selector_M space)
+                      nuevoA
+                      (Selector_P space)
+                      (Selector_L space)
+                      (Selector_seed space)
+                      (Selector_tablero space)
+                      (Selector_Nave space)
+                      (Selector_Asteroides space)
+                      (Selector_Disparos space)
+                      )
+      space
+      )                 
+  )
+
 ;Funcion  : 
 ;A.Entrada: 
 ;            
@@ -1239,19 +1757,21 @@
 ;
 ;
 (define (space->P space nuevoP )
-  (create_Space   (Selector_N space)
-                  (Selector_M space)
-                  (Selector_A space)
-                  nuevoP
-                  (Selector_L space)
-                  (Selector_seed space)
-                  (Selector_tablero space)
-                  (Selector_Nave space)
-                  (Selector_Asteroides space)
-                  (Selector_Disparos space)
-                  )
-                  
- )
+  (if (CheckSpace space)
+      (create_Space   (Selector_N space)
+                      (Selector_M space)
+                      (Selector_A space)
+                      nuevoP
+                      (Selector_L space)
+                      (Selector_seed space)
+                      (Selector_tablero space)
+                      (Selector_Nave space)
+                      (Selector_Asteroides space)
+                      (Selector_Disparos space)
+                      )
+      space
+      )                
+  )
 ;Funcion  : 
 ;A.Entrada: 
 ;            
@@ -1264,19 +1784,21 @@
 ;
 ;
 (define (space->L space nuevoL )
-  (create_Space   (Selector_N space)
-                  (Selector_M space)
-                  (Selector_A space)
-                  (Selector_P space)
-                  nuevoL
-                  (Selector_seed space)
-                  (Selector_tablero space)
-                  (Selector_Nave space)
-                  (Selector_Asteroides space)
-                  (Selector_Disparos space)
-                  )
-                  
- )
+  (if (CheckSpace space)
+      (create_Space   (Selector_N space)
+                      (Selector_M space)
+                      (Selector_A space)
+                      (Selector_P space)
+                      nuevoL
+                      (Selector_seed space)
+                      (Selector_tablero space)
+                      (Selector_Nave space)
+                      (Selector_Asteroides space)
+                      (Selector_Disparos space)
+                      )
+      space
+      )           
+  )
 ;Funcion  : 
 ;A.Entrada: 
 ;            
@@ -1289,19 +1811,21 @@
 ;
 ;
 (define (space->seed space nuevaseed )
-  (create_Space   (Selector_N space)
-                  (Selector_M space)
-                  (Selector_A space)
-                  (Selector_P space)
-                  (Selector_L space)
-                  nuevaseed
-                  (Selector_tablero space)
-                  (Selector_Nave space)
-                  (Selector_Asteroides space)
-                  (Selector_Disparos space)
-                  )
-                  
- )
+  (if (CheckSpace space)
+      (create_Space   (Selector_N space)
+                      (Selector_M space)
+                      (Selector_A space)
+                      (Selector_P space)
+                      (Selector_L space)
+                      nuevaseed
+                      (Selector_tablero space)
+                      (Selector_Nave space)
+                      (Selector_Asteroides space)
+                      (Selector_Disparos space)
+                      )
+      space
+      )           
+  )
 ;Funcion  : 
 ;A.Entrada: 
 ;            
@@ -1314,19 +1838,21 @@
 ;
 ;
 (define (space->tablero space nuevotablero  )
-  (create_Space   (Selector_N space)
-                  (Selector_M space)
-                  (Selector_A space)
-                  (Selector_P space)
-                  (Selector_L space)
-                  (Selector_seed space)
-                  nuevotablero
-                  (Selector_Nave space)
-                  (Selector_Asteroides space)
-                  (Selector_Disparos space)
-                  )
-                  
- )
+  (if (CheckSpace space)
+      (create_Space   (Selector_N space)
+                      (Selector_M space)
+                      (Selector_A space)
+                      (Selector_P space)
+                      (Selector_L space)
+                      (Selector_seed space)
+                      nuevotablero
+                      (Selector_Nave space)
+                      (Selector_Asteroides space)
+                      (Selector_Disparos space)
+                      )
+      space
+      )           
+  )
 ;Funcion  : 
 ;A.Entrada: 
 ;            
@@ -1339,19 +1865,21 @@
 ;
 ;
 (define (space->Nave space nuevaNave )
-  (create_Space   (Selector_N space)
-                  (Selector_M space)
-                  (Selector_A space)
-                  (Selector_P space)
-                  (Selector_L space)
-                  (Selector_seed space)
-                  (Selector_tablero space)
-                  nuevaNave
-                  (Selector_Asteroides space)
-                  (Selector_Disparos space)
-                  )
-                  
- )
+  (if (CheckSpace space)
+      (create_Space   (Selector_N space)
+                      (Selector_M space)
+                      (Selector_A space)
+                      (Selector_P space)
+                      (Selector_L space)
+                      (Selector_seed space)
+                      (Selector_tablero space)
+                      nuevaNave
+                      (Selector_Asteroides space)
+                      (Selector_Disparos space)
+                      )
+      space
+      )           
+  )
 ;Funcion  : 
 ;A.Entrada: 
 ;            
@@ -1364,19 +1892,22 @@
 ;
 ;
 (define (space->Asteroides space nuevosAsteroides )
-  (create_Space   (Selector_N space)
-                  (Selector_M space)
-                  (Selector_A space)
-                  (Selector_P space)
-                  (Selector_L space)
-                  (Selector_seed space)
-                  (Selector_tablero space)
-                  (Selector_Nave space)
-                  nuevosAsteroides
-                  (Selector_Disparos space)
-                  )
-                  
- )
+  (if (CheckSpace space)
+      (create_Space   (Selector_N space)
+                      (Selector_M space)
+                      (Selector_A space)
+                      (Selector_P space)
+                      (Selector_L space)
+                      (Selector_seed space)
+                      (Selector_tablero space)
+                      (Selector_Nave space)
+                      nuevosAsteroides
+                      (Selector_Disparos space)
+                      )
+      space
+      )           
+  )
+
 ;Funcion  : 
 ;A.Entrada: 
 ;            
@@ -1389,23 +1920,26 @@
 ;
 ;
 (define (space->Disparos space nuevosDisparos )
-  (create_Space   (Selector_N space)
-                  (Selector_M space)
-                  (Selector_A space)
-                  (Selector_P space)
-                  (Selector_L space)
-                  (Selector_seed space)
-                  (Selector_tablero space)
-                  (Selector_Nave space)
-                  (Selector_Asteroides space)
-                  nuevosDisparos
-                  )
-                  
- )
+  (if (CheckSpace space)
+      (create_Space   (Selector_N space)
+                      (Selector_M space)
+                      (Selector_A space)
+                      (Selector_P space)
+                      (Selector_L space)
+                      (Selector_seed space)
+                      (Selector_tablero space)
+                      (Selector_Nave space)
+                      (Selector_Asteroides space)
+                      nuevosDisparos
+                      )
+      space
+      )           
+  )
 
 
 
-;-------------------------------------------------------------------------------------------------- F. VARIAS SPACE 
+;-------------------------------------------------------------------------------------------------- F. VARIAS SPACE
+
 ;Funcion  : Crea una lista de "N" ceros para representar una fila vacia.
 ;A.Entrada: Un entero que representa la cantidad de ceros en la fila.
 ;            
@@ -1518,9 +2052,100 @@
 ;
 ;
 ;
-(define (Update_Space seed)
+(define (Comparacion lista elemento )
+  (if (equal?  (cdr lista) null)
+      #f
+      (or (Comparacion (cdr lista) elemento)
+           (Choque? (Selector_px_Asteroide elemento)
+                    (Selector_py_Asteroide elemento)
+                    (Selector_radio_Asteroide elemento)
+                    (Selector_px_Asteroide (car lista))
+                    (Selector_py_Asteroide (car lista))
+                    (Selector_radio_Asteroide (car lista))
+                    )
+           )
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (ComparacionNave lista Nave radio)
+  (if (equal?  (cdr lista) null)
+      #f
+      (or (ComparacionNave (cdr lista) Nave radio)
+           (Choque? (Selector_px_nave Nave)
+                    (Selector_py_nave Nave)
+                    radio
+                    (Selector_px_Asteroide (car lista))
+                    (Selector_py_Asteroide (car lista))
+                    (Selector_radio_Asteroide (car lista))
+                    )
+           )
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (choqueAsteroides? asteroides lista_problemas)
+  (if (equal? (cdr asteroides) null)
+      lista_problemas
+      (if (equal? #t (Comparacion (cdr asteroides) (car asteroides)))
+          (choqueAsteroides? (cdr asteroides) (cons (car asteroides) lista_problemas))
+          (choqueAsteroides? (cdr asteroides) lista_problemas)
+          )      
+      )
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Update_Space space seed)
+  (if (ComparacionNave (Selector_Asteroides space) (Selector_Nave space) 1)
+      (display "DEFEAT")
+      (if (= 0 (length (Selector_Asteroides space)))
+          (display "YOU WIN")
+          (create_Space (Selector_N space)
+                        (Selector_M space)
+                        (Selector_A space)
+                        (Selector_P space)
+                        (Selector_L space)
+                        seed
+                        (list) ;tablero                                                        ;pendiente
+                        (moveShip space 0 1 seed); (space angulo velocidad seed)
+                        (list);asteroides                                                      ;pendiente
+                        (list);disparos                                                        ;pendiente
+                        )
+          )
+      )
+  
   null
- )
+  )
 
 ;Funcion  : 
 ;A.Entrada: 
@@ -1552,6 +2177,30 @@
    (display (Selector_tablero space))
  )
 
+(define (Choque? objeto1x objeto1y radio1 objeto2x objeto2y radio2)
+  (if (and (integer? objeto1x)
+           (< 0 objeto1x )
+           (integer? objeto1y)
+           (< 0 objeto1y )
+           (integer? objeto2x)
+           (< 0 objeto2x )
+           (integer? objeto2y)
+           (< 0 objeto2y )
+           (integer? radio1)
+           (< 0 radio1 )
+           (integer? radio2)
+           (< 0 radio2 )
+           )
+      (if (<= (expt (+ (expt (- objeto1x objeto2x) 2) (expt (- objeto1y objeto2y) 2)) 0.5)
+              (+ radio1 radio2)
+             )
+          #t
+          #f
+          )
+      #f
+      )
+  )
+
 ;-------------------------------------------------------------------------------------------------------------FIN TDA SPACE------
 
 
@@ -1566,11 +2215,19 @@
 
 ;-------------------------------------------------------------------------------------------------- CREATESPACE RC
 
+(define (createSpaceRC N M A P L seed)
+  null
+ )
+
 ;-------------------------------------------------------------------------------------------------------------FIN SPACE RC------
 
 
 ;#############################################################################################################ZONA PRUEBAS
 
-(define sp1 (list (list 20 30 4 5 8 3 (create_tablero_vacio 20 30 )) (list (create_nave  "space" 10 10 6 888 1 90) (list 1 "asteroides") (list 2 "disparos")) ))
+(define sp1 (list (list 20 30 4 5 8 3 (create_tablero_vacio 20 30 )) (list (create_nave  "space" 10 1 6 888 1 90) (list   (list "Hola" 1 1 180 1 2 33 ) 1 1 180 1 2 33) (list 2 "disparos")) ))
 
 (define A (create_Asteroide  sp1 5 4 0 1 2 134 ) )
+
+(define D (create_disparo "Hola" 1 2 3 4 5 6 7 8))
+
+(define Asteroides (list (list  "hola" 3 2 180 1 2 33) (list  "hola" 6 5 180 1 2 33) (list  "hola" 1 7 180 1 1 33) ))
