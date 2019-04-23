@@ -10,6 +10,7 @@
 (define c 0)
 (define m 9)
 (define radionave 1)
+(define radiodisparo 1)
 (define pi 3.1415926535897932384626433832795028841)
 ;Esta función random tuma un xn y obtiene el xn+1 de la secuencia de números aleatorios.
 (define myRandom
@@ -2067,7 +2068,7 @@
       )
   )
 
-;Funcion  : 
+;Funcion  : Compara si se intersecta la nace con una lista de asteroides.
 ;A.Entrada: 
 ;            
 ;A.Salida : 
@@ -2093,6 +2094,32 @@
       )
   )
 
+;Funcion  : Verifica si el disparo choca con un asteroide
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (eliminar_elemento_lista lista elem)
+  
+  (cond [(equal? lista null) null]
+        [(Choque? (Selector_px_Asteroide (car lista))
+                  (Selector_py_Asteroide (car lista))
+                  (Selector_radio_Asteroide (car lista))
+                  (Selector_px_disparo elem)
+                  (Selector_px_disparo elem)
+                  radiodisparo) (car lista)]
+        [else (cons (car lista) (eliminar_elemento_lista (cdr lista) elem))]
+        )
+  
+  )
+
+
 ;Funcion  : 
 ;A.Entrada: 
 ;            
@@ -2104,15 +2131,116 @@
 ;
 ;
 ;
-(define (choqueAsteroides? asteroides lista_problemas)
-  (if (equal? (cdr asteroides) null)
-      lista_problemas
-      (if (equal? #t (Comparacion (cdr asteroides) (car asteroides)))
-          (choqueAsteroides? (cdr asteroides) (cons (car asteroides) lista_problemas))
-          (choqueAsteroides? (cdr asteroides) lista_problemas)
-          )      
-      )
+(define (identifica_elemento lista elem)
+  
+  (cond [(equal? lista null) null]
+        [(Choque? (car lista) elem) (car lista)]
+        [else (cons (car lista) (identifica_elemento (cdr lista) elem))]
+        )
+  
   )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (disparo_choca? lista elem)
+  
+  (cond [(equal? lista null) #f]
+        [(Choque? (car lista) elem) #t]
+        [else (cons (car lista) (disparo_choca? (cdr lista) elem))]
+        )
+  
+  )
+
+
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (fisica_Asteroides asteroide)
+  (cond [(= 0 (Selector_seed_Asteroide asteroide)) (list)
+                                                   ]
+        [(= 1 (Selector_seed_Asteroide asteroide)) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         )]
+        [(= 2 (Selector_seed_Asteroide asteroide)) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         )]
+        [(= 3 (Selector_seed_Asteroide asteroide)) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         )]
+        [(= 4 (Selector_seed_Asteroide asteroide)) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         )]
+        [(= 5 (Selector_seed_Asteroide asteroide)) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         )]
+        [(= 6 (Selector_seed_Asteroide asteroide)) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         )]
+        [(= 7 (Selector_seed_Asteroide asteroide)) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio Asteroide nuevoradio) velocidad) angulo) nuevopy) nuevopx)
+                                                         )]
+        )
+  
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (choqueDisparos_Asteroides space asteroides disparos nuevosAsteroides nuevosDisparos)
+  (cond [(= 0 (length disparos)) (space->Asteroides (space->Disparos space nuevosDisparos ) nuevosAsteroides )]
+        [(disparo_choca? asteroides (car disparos)) (choqueDisparos_Asteroides space
+                                                                               (eliminar_elemento_lista asteroides (car disparos))
+                                                                               (eliminar_elemento_lista disparos (car disparos))
+                                                                               (append (fisica_Asteroides (identifica_elemento asteroides (car disparos))) nuevosAsteroides)
+                                                                               (cons (car disparos) nuevosDisparos)) ]
+        [else (choqueDisparos_Asteroides space
+                                         asteroides
+                                         (cdr disparos)
+                                         nuevosAsteroides
+                                         nuevosDisparos) ]
+        )
+  )
+
 
 ;Funcion  : 
 ;A.Entrada: 
