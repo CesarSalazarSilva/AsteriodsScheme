@@ -12,36 +12,23 @@
 (define radionave 1)
 (define radiodisparo 1)
 (define pi 3.1415926535897932384626433832795028841)
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
 ;Esta función random tuma un xn y obtiene el xn+1 de la secuencia de números aleatorios.
 (define myRandom
   (lambda
       (xn)
     (mod (+ (* a xn) c) m)
-    )
-  )
-
-(define (Rand a c m)
-  (lambda
-      (xn)
-    (mod (+ (* a xn) c) m)
-    )
-  )
-;Cada vez que pedimos un random, debemos pasar como argumento el random anterior.
-;Acá un ejemplo que permite generar una lista de números aleatorios.
-;Parámetros:
-;* "cuantos" indica el largo de la lista a generar.
-;* "xActual" valor actual del random, se pasa en cada nivel de recursión de forma actualizada
-;* "maximo" Los números generados van desde 0 hasta maximo-1
-(define getListaRandom
-  (lambda (cuantos xActual maximo)
-    (if (= 0 cuantos)
-        '()
-        (let ((xNvo (myRandom xActual)))
-          (cons (mod xNvo maximo)
-                (getListaRandom (- cuantos 1) xNvo maximo)
-                )
-          )
-        )
     )
   )
 
@@ -922,7 +909,7 @@
   )
 
 ;-------------------------------------------------------------------------------------------------- F. VARIAS ASTEROIDES
-;Funcion  : Selecciona el space completo entregado a la estructura disparo.
+;Funcion  : Cambia de posicion un asteroide a un frame t+1
 ;A.Entrada: Una estructura disparo.
 ;            
 ;A.Salida : Space presente en la disparo.
@@ -933,11 +920,11 @@
 ;
 ;
 ;
-(define (moveAsteroid space angulo velocidad seed)
-  (nave->velocidad (nave->angulo (nave->py (nave->px (Selector_Nave space)
-                                                     (mod (+ (Selector_px_nave (Selector_Nave space))
+(define (moveAsteroid asteroide angulo velocidad)
+  (Asteroide->velocidad (Asteroide->angulo (Asteroide->py (Asteroide->px asteroide
+                                                     (mod (+ (Selector_px_Asteroide asteroide)
                                                              (round (* velocidad
-                                                                       (cos (Grad_Rad ( + (Selector_angulo_nave (Selector_Nave space))
+                                                                       (cos (Grad_Rad ( + (Selector_angulo_Asteroide asteroide)
                                                                                           angulo
                                                                                           )
                                                                                       )
@@ -945,12 +932,12 @@
                                                                        )
                                                                     )
                                                              )
-                                                          (Selector_N space)
+                                                          (Selector_N (Selector_space_Asteroide asteroide))
                                                           )
                                                      )                      
-                                           (mod (+ (Selector_py_nave (Selector_Nave space))
+                                           (mod (+ (Selector_py_Asteroide asteroide)
                                                    (round (* velocidad
-                                                             (sin (Grad_Rad ( + (Selector_angulo_nave (Selector_Nave space))
+                                                             (sin (Grad_Rad ( + (Selector_angulo_Asteroide asteroide)
                                                                                 angulo
                                                                                 )
                                                                             )
@@ -958,19 +945,24 @@
                                                              )
                                                           )
                                                    )
-                                                (Selector_N space)
+                                                (Selector_N (Selector_space_Asteroide asteroide))
                                                 )
                                            )
-                                 ( + (Selector_angulo_nave (Selector_Nave space))
+                                 ( + (Selector_angulo_Asteroide asteroide)
                                      angulo
                                      )               
                                  )
-                   (+ (Selector_velocidad_nave (Selector_Nave space))
+                   (+ (Selector_velocidad_Asteroide asteroide)
                       velocidad
                       )    
                    )      
   
   
+  )
+
+;Llamado abreviado
+(define (moverAsteroides x)
+  (moveAsteroid x 0 (Selector_velocidad_Asteroide x))
   )
 
 
@@ -1452,8 +1444,84 @@
   )
 
 ;-------------------------------------------------------------------------------------------------- F. VARIAS DISPARO
-(define (Shoot space velocidad seed)
-  null
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (moverDisparo disparo angulo velocidad)
+  (Disparo->velocidad (Disparo->angulo (Disparo->py (Disparo->px disparo
+                                                                         (mod (+ (Selector_px_disparo disparo)
+                                                                                 (round (* velocidad
+                                                                                           (cos (Grad_Rad ( + (Selector_angulo_disparo disparo)
+                                                                                                              angulo
+                                                                                                              )
+                                                                                                          )
+                                                                                                ) 
+                                                                                           )
+                                                                                        )
+                                                                                 )
+                                                                              (Selector_N (Selector_space_disparo disparo))
+                                                                              )
+                                                                         )                      
+                                                          (mod (+ (Selector_py_disparo disparo)
+                                                                  (round (* velocidad
+                                                                            (sin (Grad_Rad ( + (Selector_angulo_disparo disparo)
+                                                                                               angulo
+                                                                                               )
+                                                                                           )
+                                                                                 )
+                                                                            )
+                                                                         )
+                                                                  )
+                                                               (Selector_N (Selector_space_disparo disparo))
+                                                               )
+                                                          )
+                                           (Selector_angulo_disparo disparo)                                                    
+                                           )
+                        (Selector_velocidad_disparo disparo)
+                         
+                        )      
+  
+  
+  )
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (moverDisparos disparo)
+  (moverDisparo disparo (Selector_angulo_disparo disparo) (Selector_velocidad_disparo disparo))
+ )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Shoot space constante seed)
+  (if (ComparacionNave (Selector_Asteroides (space->Disparos (Update_Space space seed) (cons (create_disparo space (Selector_px_nave (Selector_Nave space)) (Selector_py_nave (Selector_Nave space)) (Selector_angulo_nave (Selector_Nave space)) constante (round (+ (Selector_px_nave (Selector_Nave space)) (* constante (cos (Selector_angulo_nave (Selector_Nave space)))))) (round (+ (Selector_py_nave (Selector_Nave space)) (* constante (sin (Selector_angulo_nave (Selector_Nave space)))))) (Selector_L space) seed) (Selector_Disparos (Update_Space space seed))) )) (Selector_Nave (space->Disparos (Update_Space space seed) (cons (create_disparo space (Selector_px_nave (Selector_Nave space)) (Selector_py_nave (Selector_Nave space)) (Selector_angulo_nave (Selector_Nave space)) constante (round (+ (Selector_px_nave (Selector_Nave space)) (* constante (cos (Selector_angulo_nave (Selector_Nave space)))))) (round (+ (Selector_py_nave (Selector_Nave space)) (* constante (sin (Selector_angulo_nave (Selector_Nave space)))))) (Selector_L space) seed) (Selector_Disparos (Update_Space space seed))) )) radionave)
+      (display "PERDISTE")
+      (space->Disparos (Update_Space space seed) (cons (create_disparo space (Selector_px_nave (Selector_Nave space)) (Selector_py_nave (Selector_Nave space)) (Selector_angulo_nave (Selector_Nave space)) constante (round (+ (Selector_px_nave (Selector_Nave space)) (* constante (cos (Selector_angulo_nave (Selector_Nave space)))))) (round (+ (Selector_py_nave (Selector_Nave space)) (* constante (sin (Selector_angulo_nave (Selector_Nave space)))))) (Selector_L space) seed) (Selector_Disparos (Update_Space space seed))) )
+      )
   )
 ;-------------------------------------------------------------------------------------------------------------FIN DISPARO------
 
@@ -1510,16 +1578,16 @@
   (if (list? posiblespace)
       (if (= 2 (length posiblespace))
           (if (and
-               (integer? (car (car posiblespace)))                                       ; N
+               (number? (car (car posiblespace)))                                       ; N
                (< 0 (car (car posiblespace)))                                            ; N mayor a 0
-               (integer? (car (car posiblespace)))                                       ; M
+               (number? (car (car posiblespace)))                                       ; M
                (< 0 (car (car posiblespace)))                                            ; M mayor que 0
-               (integer? (car (cdr (cdr (car posiblespace)))))                           ; A
+               (number? (car (cdr (cdr (car posiblespace)))))                           ; A
                (< 0      (car (cdr (cdr (car posiblespace)))))                           ; Cantidad de asteroides mayor a 0
-               (integer? (car (cdr (cdr (cdr (car posiblespace))))))                     ; P
+               (number? (car (cdr (cdr (cdr (car posiblespace))))))                     ; P
                (< 0      (car (cdr (cdr (cdr (car posiblespace))))))                     ; P mayor que 0
                (number?  (car (cdr (cdr (cdr (cdr (car posiblespace)))))))               ; L
-               (integer? (car (cdr (cdr (cdr (cdr (cdr(car posiblespace))))))))          ; Seed
+               (number? (car (cdr (cdr (cdr (cdr (cdr(car posiblespace))))))))          ; Seed
                ;(list?    (car (cdr (cdr (cdr (cdr (cdr (cdr (car posiblespace)))))))))   ; Tablero
                ;(nave?    (car (car (cdr posiblespace))))                                 ; Nave
                ;(list?    (car (cdr (car (cdr posiblespace)))))                           ; Asteroides
@@ -2139,7 +2207,7 @@
 ;
 ;
 (define (ComparacionNave lista Nave radio)
-  (if (equal?  (cdr lista) null)
+  (if (= 0 (length lista))
       #f
       (or (ComparacionNave (cdr lista) Nave radio)
            (Choque? (Selector_px_nave Nave)
@@ -2314,6 +2382,79 @@
         )
   )
 
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Asteroide_choca? lista elem)
+  (if (equal? lista null)
+      #f
+      (if (equal? #t (Choque? (Selector_px_Asteroide (car lista)) (Selector_py_Asteroide (car lista)) (Selector_radio_Asteroide (car lista)) (Selector_px_Asteroide elem) (Selector_py_Asteroide elem) (Selector_radio_Asteroide elem)))
+          #t
+          (or #f (disparo_choca? (cdr lista) elem))
+          )
+   )
+  )
+
+
+(define (eliminar_asteroide_lista lista elem)
+  
+  (cond [(equal? lista null) null]
+        [(equal? #t (Choque? (Selector_px_Asteroide (car lista))
+                  (Selector_py_Asteroide (car lista))
+                  (Selector_radio_Asteroide (car lista))
+                  (Selector_px_Asteroide elem)
+                  (Selector_px_Asteroide elem)
+                  (Selector_radio_Asteroide elem))) (cdr lista)]
+        [else (cons (car lista) (eliminar_elemento_lista (cdr lista) elem))]
+        )
+  
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (modificarTrayectoria lista elem)
+  (if (Asteroide_choca? lista elem)
+      (moveAsteroid elem (* -1 (Selector_angulo_Asteroide elem)) (myRandom (Selector_seed_Asteroide elem)))
+      elem
+      )    
+  )
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (AplicacionModTrayectoria lista resultado)
+  (cond [(equal? lista null) (list)]
+        [(equal? #t (Asteroide_choca? (eliminar_asteroide_lista lista (car lista)) (car lista)))  ( cons (modificarTrayectoria (eliminar_asteroide_lista lista (car lista)) (car lista)) (AplicacionModTrayectoria (cdr lista) resultado))]
+        [else (cons (car lista) (AplicacionModTrayectoria (cdr lista) resultado))]
+   )
+
+  )
+
 
 ;Funcion  : 
 ;A.Entrada: 
@@ -2342,17 +2483,20 @@
                                                                   (moveShip space 0 0 seed); (space angulo velocidad seed)
                                                                   (Selector_Asteroides(choqueDisparos_Asteroides space (Selector_Asteroides space) (Selector_Disparos space) (list) (list)));asteroides                                                      
                                                                   (Selector_Disparos (choqueDisparos_Asteroides space (Selector_Asteroides space) (Selector_Disparos space) (list) (list)));disparos                                                        
-                                                                  )) (Selector_Nave (create_Space (Selector_N space)
-                                                                                                  (Selector_M space)
-                                                                                                  (Selector_A space)
-                                                                                                  (Selector_P space)
-                                                                                                  (Selector_L space)
-                                                                                                  (myRandom seed)
-                                                                                                  (list) ;tablero                                                        ;pendiente
-                                                                                                  (moveShip space 0 0 seed); (space angulo velocidad seed)
-                                                                                                  (Selector_Asteroides(choqueDisparos_Asteroides space (Selector_Asteroides space) (Selector_Disparos space) (list) (list)));asteroides                                                      
-                                                                                                  (Selector_Disparos (choqueDisparos_Asteroides space (Selector_Asteroides space) (Selector_Disparos space) (list) (list)));disparos                                                        
-                                                                                                  )) radionave)
+                                                                  ))
+                               (Selector_Nave (create_Space (Selector_N space)
+                                                            (Selector_M space)
+                                                            (Selector_A space)
+                                                            (Selector_P space)
+                                                            (Selector_L space)
+                                                            (myRandom seed)
+                                                            (list) ;tablero                                                        ;pendiente
+                                                            (moveShip space 0 0 seed); (space angulo velocidad seed)
+                                                            (Selector_Asteroides(choqueDisparos_Asteroides space (Selector_Asteroides space) (Selector_Disparos space) (list) (list)));asteroides                                                      
+                                                            (Selector_Disparos (choqueDisparos_Asteroides space (Selector_Asteroides space) (Selector_Disparos space) (list) (list)));disparos                                                        
+                                                            )
+                                              )
+                               radionave)
               (display "DEFEAT")
               (create_Space (Selector_N space)
                             (Selector_M space)
@@ -2362,16 +2506,14 @@
                             (myRandom seed)
                             (list) ;tablero                                                        ;pendiente
                             (moveShip space 0 0 seed); (space angulo velocidad seed)
-                            (Selector_Asteroides(choqueDisparos_Asteroides space (Selector_Asteroides space) (Selector_Disparos space) (list) (list)));asteroides                                                      
-                            (Selector_Disparos (choqueDisparos_Asteroides space (Selector_Asteroides space) (Selector_Disparos space) (list) (list)));disparos                                                        
+                            (AplicacionModTrayectoria (map moverAsteroides (Selector_Asteroides(choqueDisparos_Asteroides space (Selector_Asteroides space) (Selector_Disparos space) (list) (list)))) (list));asteroides                                                      
+                            (map moverDisparos (Selector_Disparos (choqueDisparos_Asteroides space (Selector_Asteroides space) (Selector_Disparos space) (list) (list))));disparos                                                        
                             )
               
               )
           )
           
       )
-  
-  null
   )
 
 ;Funcion  : 
@@ -2404,6 +2546,17 @@
    (display (Selector_tablero space))
  )
 
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
 (define (Choque? objeto1x objeto1y radio1 objeto2x objeto2y radio2)
   (if (and (integer? objeto1x)
            (< 0 objeto1x )
@@ -2433,17 +2586,45 @@
 
 
 ;-------------------------------------------------------------------------------------------------- CREATESPACE RL
+
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
 (define (createSpaceRL N M A P L seed)
-  (list (list 20 30 4 5 8 3 (create_tablero_vacio 20 30 )) (list (create_nave  "space" 10 10 6 888 1 90) (list 1 "asteroides") (list 2 "disparos")) )
-  
+  (create_Space N M A P L seed (create_tablero_vacio 20 30 )
+                (create_nave  (list (list  N M A P L seed (list))(list)) (round (/ N 2)) (round (/ M 2)) 0 seed 0 0)
+                (list);crear asteroides
+                (list))
   )
 ;-------------------------------------------------------------------------------------------------------------FIN SPACE RC------
 
 
 ;-------------------------------------------------------------------------------------------------- CREATESPACE RC
 
+;Funcion  : 
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
 (define (createSpaceRC N M A P L seed)
-  null
+  (create_Space N M A P L seed (create_tablero_vacio 20 30 )
+                (create_nave  (list (list  N M A P L seed (list))(list)) (round (/ N 2)) (round (/ M 2)) 0 seed 0 0)
+                (list);crear asteroides
+                (list))
  )
 
 ;-------------------------------------------------------------------------------------------------------------FIN SPACE RC------
@@ -2451,12 +2632,12 @@
 
 ;#############################################################################################################ZONA PRUEBAS
 ;(create_tablero_vacio 20 30 )
+;(list (list  20 30 4 5 8 3 (list))(list))
 
+(define D (list (create_disparo (list (list  20 30 4 5 8 3 (list))(list)) 3 2 3 4 5 6 7 8) (create_disparo (list (list  20 30 4 5 8 3 (list))(list)) 40 2 3 4 5 6 7 8) ))
 
-(define D (list (create_disparo (list ) 3 2 3 4 5 6 7 8) (create_disparo (list) 40 2 3 4 5 6 7 8) ))
+(define Asteroides (list (list  (list (list  20 30 4 5 8 3 (list))(list)) 3 2 180 2 4 33) (list  (list (list  20 30 4 5 8 3 (list))(list)) 6 5 180 1 4 33) (list  (list (list  20 30 4 5 8 3 (list))(list)) 1 7 180 3 4 33) ))
 
-(define Asteroides (list (list  (list (list 20 30 4 5 8 3 "tablero") (list)) 3 2 180 1 4 33) (list  (list (list 20 30 4 5 8 3 "tablero") (list)) 6 5 180 1 4 33) (list  (list (list 20 30 4 5 8 3 "tablero") (list)) 1 7 180 1 4 33) ))
+(define sp1 (list (list   20 30 4 5 8 3 (list)) (list (create_nave  (list (list  20 30 4 5 8 3 (list))(list)) 10 1 6 888 1 90) Asteroides D) ))
 
-(define sp1 (list (list 20 30 4 5 8 3 (list)) (list (create_nave  (list) 10 1 6 888 1 90) Asteroides D) ))
-
-(define A (create_Asteroide  sp1 5 4 0 1 4 134 ) )
+(define A   (create_Asteroide  sp1 5 4 0 1 4 134 ) )
