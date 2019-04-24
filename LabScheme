@@ -12,6 +12,7 @@
 (define radionave 1)
 (define radiodisparo 1)
 (define radioasteroideinicial 8)
+(define Velocidad_disparo 2)
 (define pi 3.1415926535897932384626433832795028841)
 
 ;Funcion  : 
@@ -33,10 +34,39 @@
     )
   )
 
+;Funcion  : Convierte un numero de grados a radianes.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Grad_Rad numero)
+  (/ (* pi numero) 180)
+  )
+
+;Funcion  : Convierte un numero de radianes a grados.
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
+(define (Rad_Grad numero)
+  (/ (* 180 numero) pi)
+  )
+
 ;-------------------------------------------------------------------------------------------------- TDA NAVE
 ;-------------------------------------------------------------------------------------------------- REPRESENTACION NAVE
 ; (list  space px py velocidad seed estadoJuego angulo)
-
 
 ;-------------------------------------------------------------------------------------------------- CONSTRUCTORES NAVE
 
@@ -408,7 +438,7 @@
                                            )    
                                         )
                        radionave)
-      (display "DEFEAT")
+      (nave->estadojuego (Selector_Nave space) 0)
       (nave->velocidad (nave->angulo (nave->py (nave->px (Selector_Nave space)
                                                          (mod (+ (Selector_px_nave (Selector_Nave space))
                                                                  (round (* velocidad
@@ -447,37 +477,8 @@
       ) 
   )
 
-;Funcion  : Convierte un numero de grados a radianes.
-;A.Entrada: 
-;            
-;A.Salida : 
-;
-;Funcion Recursiva? : 
-;
-;Ejemplos:
-;
-;
-;
-(define (Grad_Rad numero)
-  (/ (* pi numero) 180)
-  )
-
-;Funcion  : Convierte un numero de radianes a grados.
-;A.Entrada: 
-;            
-;A.Salida : 
-;
-;Funcion Recursiva? : 
-;
-;Ejemplos:
-;
-;
-;
-(define (Rad_Grad numero)
-  (/ (* 180 numero) pi)
-  )
-
 ;-------------------------------------------------------------------------------------------------------------FIN NAVE-------------
+
 ;-------------------------------------------------------------------------------------------------- TDA ASTEROIDES
 ;-------------------------------------------------------------------------------------------------- REPRESENTACION ASTEROIDE
 ;(init_asteroid  space px py angulo velocidad radio seed )
@@ -840,8 +841,18 @@
   
   
   )
-
-;Llamado abreviado
+ 
+;Funcion  : Llamado abreviado de moveAsteroid
+;A.Entrada: 
+;            
+;A.Salida : 
+;
+;Funcion Recursiva? : 
+;
+;Ejemplos:
+;
+;
+;
 (define (moverAsteroides x)
   (moveAsteroid x 0 (Selector_velocidad_Asteroide x))
   )
@@ -1362,12 +1373,13 @@
 ;
 (define (Shoot space constante seed)
   (if (ComparacionNave (Selector_Asteroides (space->Disparos (Update_Space space seed) (cons (create_disparo space (Selector_px_nave (Selector_Nave space)) (Selector_py_nave (Selector_Nave space)) (Selector_angulo_nave (Selector_Nave space)) constante (round (+ (Selector_px_nave (Selector_Nave space)) (* constante (cos (Selector_angulo_nave (Selector_Nave space)))))) (round (+ (Selector_py_nave (Selector_Nave space)) (* constante (sin (Selector_angulo_nave (Selector_Nave space)))))) (Selector_L space) seed) (Selector_Disparos (Update_Space space seed))) )) (Selector_Nave (space->Disparos (Update_Space space seed) (cons (create_disparo space (Selector_px_nave (Selector_Nave space)) (Selector_py_nave (Selector_Nave space)) (Selector_angulo_nave (Selector_Nave space)) constante (round (+ (Selector_px_nave (Selector_Nave space)) (* constante (cos (Selector_angulo_nave (Selector_Nave space)))))) (round (+ (Selector_py_nave (Selector_Nave space)) (* constante (sin (Selector_angulo_nave (Selector_Nave space)))))) (Selector_L space) seed) (Selector_Disparos (Update_Space space seed))) )) radionave)
-      (display "PERDISTE")
+      (nave->estadojuego (Selector_Nave space) 0)
       (space->Disparos (Update_Space space seed) (cons (create_disparo space (Selector_px_nave (Selector_Nave space)) (Selector_py_nave (Selector_Nave space)) (Selector_angulo_nave (Selector_Nave space)) constante (round (+ (Selector_px_nave (Selector_Nave space)) (* constante (cos (Selector_angulo_nave (Selector_Nave space)))))) (round (+ (Selector_py_nave (Selector_Nave space)) (* constante (sin (Selector_angulo_nave (Selector_Nave space)))))) (Selector_L space) seed) (Selector_Disparos (Update_Space space seed))) )
       )
   )
 
 ;-------------------------------------------------------------------------------------------------------------FIN DISPARO------
+
 ;-------------------------------------------------------------------------------------------------- TDA SPACE 
 ;-------------------------------------------------------------------------------------------------- REPRESENTACION SPACE 
 ;'( '(N M A P L seed listatablero)
@@ -2176,9 +2188,9 @@
 ;
 (define (Update_Space space seed)
   (if (ComparacionNave (Selector_Asteroides space) (Selector_Nave space) radionave)
-      (display "DEFEAT")      
+      (nave->estadojuego (Selector_Nave space) 0)      
       (if (= 0 (length (Selector_Asteroides space)))
-          (display "YOU WIN")
+          (nave->estadojuego (Selector_Nave space) 1)
           ;ejecuto las colisiones asteroide y disparos
           (if (ComparacionNave (Selector_Asteroides (create_Space (Selector_N space)
                                                                   (Selector_M space)
@@ -2204,7 +2216,7 @@
                                                             )
                                               )
                                radionave)
-              (display "DEFEAT")
+              (nave->estadojuego (Selector_Nave space) 0)
               (create_Space (Selector_N space)
                             (Selector_M space)
                             (Selector_A space)
@@ -2233,7 +2245,10 @@
 ;
 ;
 (define (Demo_lazy space seed)
-  null
+  (cond [(not (and (list? space) (number? seed))) null]
+        [(or (= 0 (Selector_estadojuego_nave (Selector_Nave space)) ) (= 0 (Selector_estadojuego_nave (Selector_Nave space)) ) ) null]
+        [else (cons space (Demo_lazy (Shoot (Update_Space space 4) Velocidad_disparo seed ) (myRandom seed)) )]
+        )
  )
 
 ;Funcion  : 
@@ -2248,7 +2263,7 @@
 ;
 ;
 (define (Space->String space resultado)
-   (display (Selector_tablero space))
+   null
  )
 
 ;Funcion  : 
@@ -2303,7 +2318,7 @@
 ;
 (define (createSpaceRL N M A P L seed)
   (create_Space N M A P L seed (list)
-                (create_nave  (list (list  N M A P L seed (list))(list)) (round (/ N 2)) (round (/ M 2)) 0 seed 0 0)
+                (create_nave  (list (list  N M A P L seed (list))(list)) (round (/ N 2)) (round (/ M 2)) 0 seed 2 0)
                 (create_RL_Asteroides N M A P L seed);crear asteroides
                 (list))
   )
@@ -2324,7 +2339,7 @@
 ;
 (define (createSpaceRC N M A P L seed)
   (create_Space N M A P L seed (list)
-                (create_nave  (list (list  N M A P L seed (list))(list)) (round (/ N 2)) (round (/ M 2)) 0 seed 0 0)
+                (create_nave  (list (list  N M A P L seed (list))(list)) (round (/ N 2)) (round (/ M 2)) 0 seed 2 0)
                 (create_RC_Asteroides N M A P L seed (list));crear asteroides
                 (list))
  )
