@@ -6,8 +6,8 @@
 (define null '())
 
 ;Estas constantes
-(define a 2); multiplicador
-(define c 0); aumento
+(define a 4); multiplicador
+(define c 1); aumento
 (define m 9); modulo
 (define radionave 1)
 (define radiodisparo 1)
@@ -1288,24 +1288,7 @@
        )
   )
 
-;Funcion 96: Compara si ha chocado un asteroide con una lista de asteroides.
-;Dom       : Lista de asteroides x Lista Asteroide.
-;Rec       : Booleano.
-(define (Comparacion listaAsteroides Asteroide )
-  (if (equal?  (cdr listaAsteroides) null)
-      #f
-      (or (Comparacion (cdr listaAsteroides) Asteroide)
-          (Choque? (Selector_px_Asteroide Asteroide)
-                   (Selector_py_Asteroide Asteroide)
-                   (Selector_radio_Asteroide Asteroide)
-                   (Selector_px_Asteroide (car listaAsteroides))
-                   (Selector_py_Asteroide (car listaAsteroides))
-                   (Selector_radio_Asteroide (car listaAsteroides)) )
-          )
-      )
-  )
-
-;Funcion 97: Compara si se intersecta la nave con asteroides en una lista de asteroides.
+;Funcion 96: Compara si se intersecta la nave con asteroides en una lista de asteroides.
 ;Dom       : Lista de Asteroides x lista nave x numero (radionave).
 ;Rec       : Booleano.
 (define (ComparacionNave lista Nave radio)
@@ -1317,7 +1300,7 @@
       )
   )
 
-;Funcion 98: Verifica si el disparo choca con un asteroide de ser asi entrega una lista con el asteroide respectivo eliminado de ella (la lista).
+;Funcion 97: Verifica si el disparo choca con un asteroide de ser asi entrega una lista con el asteroide respectivo eliminado de ella (la lista).
 ;Dom       : Lista de Asteroides x Lista disparo.
 ;Rec       : Lista sin el Asteroide que colisiona.
 (define (eliminar_elemento_lista lista elem)  
@@ -1333,7 +1316,7 @@
         )  
   )
 
-;Funcion 99: Entrega el Asteroide que colisiona con el disparo.
+;Funcion 98: Entrega el Asteroide que colisiona con el disparo.
 ;Dom       : Lista de Asteroides x Lista disparo.
 ;Rec       : Lista sin el Asteroide que colisiona.
 (define (identifica_elemento lista elem)
@@ -1351,7 +1334,7 @@
       )
   )
 
-;Funcion100: Verifica si el disparo choca con un asteroide de ser asi entrega un Booleano.
+;Funcion 99: Verifica si el disparo choca con un asteroide de ser asi entrega un Booleano.
 ;Dom       : Lista de Asteroides x lista Disparo
 ;Rec       : Booleano
 (define (disparo_choca? lista elem)
@@ -1364,7 +1347,7 @@
       )
   )
 
-;Funcion101: Crea tantos asteroides como pida la seed y todos con un radio equivalente a la mitad del anterior, de ser 2 el original se entrega una lista vacia. (desde 0 a 7)
+;Funcion100: Crea tantos asteroides como pida la seed y todos con un radio equivalente a la mitad del anterior, de ser 2 el original se entrega una lista vacia. (desde 0 a 7)
 ;Dom       : Lista Asteroide x numero x numero.
 ;Rec       : Lista de Asteroides de mitad de radio del anterior. 
 (define (fisica_Asteroides asteroide valorRandom seed)
@@ -1467,7 +1450,7 @@
       )
   )
 
-;Funcion102: Efectua la colision entre disparos y Asteroides.
+;Funcion101: Efectua la colision entre disparos y Asteroides.
 ;Dom       : Lista Space x lista Asteroides x lista Disparos x lista de nuevos asteroides x lista de disparos que no provocaron una colision.
 ;Rec       : Space modificado con las respectivas colisiones.
 (define (choqueDisparos_Asteroides space asteroides disparos nuevosAsteroides disparoNoChocado)
@@ -1491,7 +1474,7 @@
         )
   )
 
-;Funcion103: LLamado Simplificado de 102.
+;Funcion102: LLamado Simplificado de 102.
 ;Dom       : Lista Space.
 ;Rec       : Space modificado con las respectivas colisiones.
 (define (Choque_Dis_Ast space)
@@ -1501,9 +1484,9 @@
       )
   )
 
-;Funcion104: 
-;Dom       :
-;Rec       :
+;Funcion103: Compara si ha chocado un asteroide con una lista de asteroides.
+;Dom       : Lista de asteroides x Lista Asteroide.
+;Rec       : Booleano.
 (define (Asteroide_choca? lista elem)
   (if (equal? lista null)
       #f
@@ -1519,9 +1502,9 @@
       )
   )
 
-;Funcion105: 
-;Dom       :
-;Rec       :
+;Funcion104: Verifica si el Asteroide choca con un asteroide en la lista de ser asi entrega una lista con el asteroide respectivo eliminado de ella (la lista).
+;Dom       : Lista de Asteroides x Lista Asteroide.
+;Rec       : Lista sin el Asteroide que colisiona.
 (define (eliminar_asteroide_lista lista elem)
   (cond [(equal? lista null) null]
         [(equal? #t (Choque? (Selector_px_Asteroide (car lista))
@@ -1534,27 +1517,27 @@
         )  
   )
 
-;Funcion106: 
-;Dom       :
-;Rec       :
+;Funcion105: Recorre una lista de asteroides, si colisiona con alguno, se modifica su Direccion, de no ser asi se devuelve el elemento.
+;Dom       : Lista de Asteroides x Lista Asteroide
+;Rec       : Lista Asteroide
 (define (modificarTrayectoria lista elem)
   (if (Asteroide_choca? lista elem)
-      (moveAsteroid elem (* -1 (Selector_angulo_Asteroide elem)) (myRandom (Selector_seed_Asteroide elem)))
+      (moveAsteroid elem (* (Selector_seed_Asteroide elem) (Selector_angulo_Asteroide elem)) (myRandom (Selector_seed_Asteroide elem)))
       elem
       )    
   )
 
-;Funcion107: 
+;Funcion106: Recursiva Lineal que Modifica una lista de Asteroides que colisionan entre si 
 ;Dom       :
 ;Rec       :
-(define (AplicacionModTrayectoria lista resultado)
+(define (AplicacionModTrayectoria lista)
   (cond [(equal? lista null) (list)]
-        [(equal? #t (Asteroide_choca? (eliminar_asteroide_lista lista (car lista)) (car lista)))  ( cons (modificarTrayectoria (eliminar_asteroide_lista lista (car lista)) (car lista)) (AplicacionModTrayectoria (cdr lista) resultado))]
-        [else (cons (car lista) (AplicacionModTrayectoria (cdr lista) resultado))]
+        [(equal? #t (Asteroide_choca? (eliminar_asteroide_lista lista (car lista)) (car lista)))  ( cons (modificarTrayectoria (eliminar_asteroide_lista lista (car lista)) (car lista)) (AplicacionModTrayectoria (cdr lista)))]
+        [else (cons (car lista) (AplicacionModTrayectoria (cdr lista)))]
         )
   )
 
-;Funcion108: Funcion que mueve elementos dentro del space a un t+1, ademas verifica condiciones de perdida, victoria, coliciones y destuccion de Asteroides. 
+;Funcion107: Funcion que mueve elementos dentro del space a un t+1, ademas verifica condiciones de perdida, victoria, coliciones y destuccion de Asteroides. 
 ;Dom       : Lista Space x Entero.
 ;Rec       : Lista Space en t+1.
 (define (Update_Space space seed)
@@ -1570,8 +1553,8 @@
                                                                   (Selector_L space)
                                                                   (myRandom seed)                                                    
                                                                   (moveShip space 0 1 seed)
-                                                                  (Selector_Asteroides (Choque_Dis_Ast (space->Asteroides space
-                                                                                                                          (map moverAsteroides (Selector_Asteroides space))) ))  ;mover                                                   
+                                                                  (AplicacionModTrayectoria (Selector_Asteroides (Choque_Dis_Ast (space->Asteroides space
+                                                                                                                          (map moverAsteroides (Selector_Asteroides space))) )))  ;mover                                                   
                                                                   (Selector_Disparos (Choque_Dis_Ast (space->Disparos space
                                                                                                                       (map moverDisparos (Selector_Disparos space))) ))    ;mover                                            
                                                                   )
@@ -1583,8 +1566,8 @@
                                                             (Selector_L space)
                                                             (myRandom seed)                                                      
                                                             (moveShip space 0 1 seed)
-                                                            (Selector_Asteroides (Choque_Dis_Ast (Choque_Dis_Ast (space->Asteroides space
-                                                                                                                                    (map moverAsteroides (Selector_Asteroides space))) )))         ;mover                                            
+                                                            (AplicacionModTrayectoria(Selector_Asteroides (Choque_Dis_Ast (Choque_Dis_Ast (space->Asteroides space
+                                                                                                                                    (map moverAsteroides (Selector_Asteroides space))) ))) )        ;mover                                            
                                                             (Selector_Disparos (Choque_Dis_Ast (space->Disparos space
                                                                                                                 (map moverDisparos  (Selector_Disparos space)))))           ;mover                                        
                                                             )
@@ -1599,8 +1582,8 @@
                             (Selector_L space)
                             (myRandom seed)                                                                                 
                             (moveShip space 0 1 seed)
-                            (Selector_Asteroides (Choque_Dis_Ast (Choque_Dis_Ast (space->Asteroides space
-                                                                                                    (map moverAsteroides (Selector_Asteroides space))) )))                                                     
+                            (AplicacionModTrayectoria (Selector_Asteroides (Choque_Dis_Ast (Choque_Dis_Ast (space->Asteroides space
+                                                                                                    (map moverAsteroides (Selector_Asteroides space))) ))) )                                                    
                             (Selector_Disparos (Choque_Dis_Ast (space->Disparos space
                                                                                 (map moverDisparos  (Selector_Disparos space)))))                                                     
                             )              
@@ -1609,7 +1592,7 @@
       )
   )
 
-;Funcion109: 
+;Funcion108: 
 ;Dom       :
 ;Rec       :
 (define (Demo_lazy space seed)
@@ -1623,14 +1606,14 @@
   )
   
 
-;Funcion110: 
+;Funcion109: 
 ;Dom       :
 ;Rec       :
 (define (Space->String space resultado)
    null
  )
 
-;Funcion111: Verifica el la colicion de dos objetos tomando en cuenta su distancia y radio.
+;Funcion110: Verifica el la colicion de dos objetos tomando en cuenta su distancia y radio.
 ;Dom       : Numero x numero x numerox numero x numero x numero
 ;Rec       : Booleano
 (define (Choque? objeto1x objeto1y radio1 objeto2x objeto2y radio2)
@@ -1661,7 +1644,7 @@
 
 ;-------------------------------------------------------------------------------------------------- CREATESPACE RL
 
-;Funcion112: Funcion que crea un espacio con almenos una funcion Recursiva Lineal.
+;Funcion111: Funcion que crea un espacio con almenos una funcion Recursiva Lineal.
 ;Dom       : Numero x numero x numero x numero x numero x numero.
 ;Rec       : Lista Space
 (define (createSpaceRL N M A P L seed)
@@ -1680,7 +1663,7 @@
 ;-------------------------------------------------------------------------------------------------------------FIN SPACE RC------
 ;-------------------------------------------------------------------------------------------------- CREATESPACE RC
 
-;Funcion113: Funcion que crea un espacio con almenos una funcion Recursiva de Cola.
+;Funcion112: Funcion que crea un espacio con almenos una funcion Recursiva de Cola.
 ;Dom       : Numero x numero x numero x numero x numero x numero.
 ;Rec       : Lista Space
 (define (createSpaceRC N M A P L seed)
