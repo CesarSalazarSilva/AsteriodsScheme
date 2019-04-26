@@ -1,7 +1,8 @@
 #!r6rs
 (import (rnrs lists (6))
         (rnrs base (6))
-        (rnrs io simple (6)))
+        (rnrs io simple (6))
+         (rnrs r5rs (6)))
 
 (define null '())
 
@@ -21,7 +22,7 @@
                     (list(list 100 100 5 4 5 2) 50 50 4 45 52.62660994408865 54.25451762267059 5 2)
                     (list(list 100 100 5 4 5 2) 50 50 4 45 52.62660994408865 54.25451762267059 5 2)) )
 
-;Funcion 1 : 
+;Funcion 1 : Genera un valor Random a partir de un numero
 ;Dom       : Numero.
 ;Rec       : Numero.
 (define myRandom
@@ -1592,16 +1593,28 @@
       )
   )
 
-;Funcion108: 
-;Dom       :
+;Funcion108: Funcion que genera una posible lista infinita de espacios a travez de lazy-force hasta que choque o gane.
+;Dom       : Lista Space x numero.
 ;Rec       :
 (define (Demo_lazy space seed)
   (if (CheckSpace space)
       (if (or (= 0 (Selector_estadojuego_nave (Selector_Nave space)) ) (= 1 (Selector_estadojuego_nave (Selector_Nave space)) ) )      
-          null
-          (cons space (Demo_lazy (Shoot space Velocidad_disparo seed) seed)) 
+          space
+          (cons space (delay (Demo_lazy (Shoot space Velocidad_disparo seed) seed))) 
           )
       null
+      )
+  )
+
+;Funcion108.1: Funcion que ejecuta el force cantidad veces.
+;Dom         : Lista Space x numero.
+;Rec         : Lista de Spaces
+(define (Force_Demo_lazy lista_dePromesas  resultado contador)
+  (if (and (= contador 0))
+      resultado
+      (Force_Demo_lazy (force (cdr lista_dePromesas) )
+                       (cons (force (cdr lista_dePromesas)) resultado)
+                       (- contador 1))
       )
   )
   
@@ -1682,4 +1695,4 @@
 
 
 ;Zona Ejemplos Funciones:
-(define space (createSpaceRL 50 50 5 4 5 2))
+;(define space (createSpaceRL 50 50 5 4 5 2))
