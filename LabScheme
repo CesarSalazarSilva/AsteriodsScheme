@@ -12,8 +12,8 @@
 (define radionave 1)
 (define radiodisparo 1)
 (define radioasteroideinicial 8)
-(define Velocidad_disparo 2)
-(define ini_angulonave 45)
+(define Velocidad_disparo 3)
+(define ini_angulonave 270)
 (define ini_velocidad 1)
 (define pi 3.1415926535897932384626433832795028841)
 (define Disp  (list (list(list 100 100 5 4 5 2) 50 50 4 45 52.62660994408865 54.25451762267059 5 2)
@@ -923,7 +923,6 @@
   (moverDisparo disparo (Selector_angulo_disparo disparo) (Selector_velocidad_disparo disparo))
  )
 
-;(space->Nave space (nave->estadojuego (Selector_Nave space) 0) )
 ;Funcion  : 
 ;Dom       :
 ;Rec       :
@@ -989,7 +988,7 @@
                                                          (Selector_L space) 
                                                          seed) )
 
-                                   (Selector_Disparos space)) )
+                                   (map moverDisparos (Selector_Disparos space)) ) )
           )
       null
       )
@@ -1357,6 +1356,7 @@
 ;Dom       :
 ;Rec       :
 (define (fisica_Asteroides asteroide valorRandom seed)
+ (if (Asteroide? asteroide)
   (cond [(>= 2 (Selector_radio_Asteroide asteroide)) (list)
                                                      ]
         [(>= 1 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))  (Selector_py_Asteroide asteroide) )  (Selector_px_Asteroide asteroide))                                                                       
@@ -1407,30 +1407,52 @@
                                                                                  (+ (Selector_angulo_Asteroide asteroide) 0))
                                                               (Selector_py_Asteroide asteroide)  )
                                                (Selector_px_Asteroide asteroide) )
+                                
                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
                                                                                                                          (/ (Selector_radio_Asteroide asteroide) 2))
                                                                                                        (+ (Selector_velocidad_Asteroide asteroide) seed))
                                                                                  (+ (Selector_angulo_Asteroide asteroide) 45))
                                                               (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide)))
                                                (mod (+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                
                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
                                                                                                                          (/ (Selector_radio_Asteroide asteroide) 2))
                                                                                                        (+ (Selector_velocidad_Asteroide asteroide) seed))
                                                                                  (+ (Selector_angulo_Asteroide asteroide) 135))
                                                               (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide)))
                                                (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                
                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
                                                                                                                          (/ (Selector_radio_Asteroide asteroide) 2))
                                                                                                        (+ (Selector_velocidad_Asteroide asteroide) seed))
                                                                                  (+ (Selector_angulo_Asteroide asteroide) 315))
                                                               (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide)))
                                                (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                
                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
-                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2)) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 225)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (/ (Selector_radio_Asteroide asteroide) 2)) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 90))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (+ (Selector_px_Asteroide asteroide) 0))
-                                (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (/ (Selector_radio_Asteroide asteroide) 2)) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 270)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (+ (Selector_px_Asteroide asteroide) 0))
+                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2))
+                                                                                                       (+ (Selector_velocidad_Asteroide asteroide) seed))
+                                                                                 (+ (Selector_angulo_Asteroide asteroide) 225))
+                                                              (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide)))
+                                               (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                
+                                (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
+                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2))
+                                                                                                       (+ (Selector_velocidad_Asteroide asteroide) seed))
+                                                                                 (+ (Selector_angulo_Asteroide asteroide) 90))
+                                                              (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide)))
+                                               (+ (Selector_px_Asteroide asteroide) 0))
+                                
+                                (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
+                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2))
+                                                                                                       (+ (Selector_velocidad_Asteroide asteroide) seed))
+                                                                                 (+ (Selector_angulo_Asteroide asteroide) 270))
+                                                              (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide)))
+                                               (+ (Selector_px_Asteroide asteroide) 0))
                                 )]
-        )  
+        )
+  (display "No se entregó un Asteroide a FisicadeAsteroides")
+  )
   )
 ;(space->Asteroides (space->Disparos space nuevosDisparos ) (append asteroides nuevosAsteroides) )
 ;Funcion  : 
