@@ -22,8 +22,8 @@
                     (list(list 100 100 5 4 5 2) 50 50 4 45 52.62660994408865 54.25451762267059 5 2)) )
 
 ;Funcion 1 : 
-;Dom       :
-;Rec       :
+;Dom       : Numero.
+;Rec       : Numero.
 (define myRandom
   (lambda
       (xn)
@@ -32,27 +32,26 @@
   )
 
 ;Funcion 2 : Convierte un numero de grados a radianes.
-;Dom       :
-;Rec       :
+;Dom       : Numero.
+;Rec       : Numero.
 (define (Grad_Rad numero)
   (/ (* pi numero) 180)
   )
 
 ;Funcion 3 : Convierte un numero de radianes a grados.
-;Dom       :
-;Rec       :
+;Dom       : Numero.
+;Rec       : Numero.
 (define (Rad_Grad numero)
   (/ (* 180 numero) pi)
   )
 ;-------------------------------------------------------------------------------------------------- TDA NAVE
 ;-------------------------------------------------------------------------------------------------- REPRESENTACION NAVE
-; (list  space px py velocidad seed estadoJuego angulo)
 
 ;-------------------------------------------------------------------------------------------------- CONSTRUCTORES NAVE
 
 ;Funcion 4 : Construye una nave.
-;Dom       :
-;Rec       :
+;Dom       : lista que contiene las variables M N A P L y seed (numeros) x numero x numero x numero x numero x numero x numero.
+;Rec       : lista que representa a una nave.
 (define (create_nave variables px py velocidad seed estadoJuego angulo)
   (if (and  (number? px) (number? py) (number? velocidad) (number? seed)  )
       (list  variables px py velocidad seed estadoJuego angulo)
@@ -63,8 +62,8 @@
 ;-------------------------------------------------------------------------------------------------- PERTENENCIA NAVE
 
 ;Funcion 5 : Verifica si el argumento entregado corresponde a una estructura Nave.
-;Dom       :
-;Rec       :
+;Dom       : Posible lista que representa a una nave. 
+;Rec       : Booleano.
 (define (nave? posibleNave)
   (if (list? posibleNave)
       (if (= 7 (length posibleNave))
@@ -87,8 +86,8 @@
 ;-------------------------------------------------------------------------------------------------- SELECTORES NAVE -
 
 ;Funcion 6 : Selecciona el space completo entregado a la estructura nave.
-;Dom       :
-;Rec       :
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Lista de Variables de Nave
 (define (Selector_variables_nave nave)
   (if (nave? nave)
       (car  nave)
@@ -97,8 +96,8 @@
   )
 
 ;Funcion 7 : Selecciona componente x de la nave.
-;Dom       :
-;Rec       :
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_px_nave nave)
   (if (nave? nave)
       (car (cdr nave))
@@ -107,8 +106,8 @@
   )
 
 ;Funcion 8 : Selecciona componente y de la nave.
-;Dom       :
-;Rec       :
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero
 (define (Selector_py_nave nave)
   (if (nave? nave)
       (car (cdr (cdr nave)))
@@ -117,8 +116,8 @@
   )
 
 ;Funcion 9 : Selecciona componente velocidad de la nave.
-;Dom       :
-;Rec       :
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_velocidad_nave nave)
   (if (nave? nave)
       (car (cdr (cdr (cdr nave))))
@@ -127,8 +126,8 @@
   )
 
 ;Funcion 10: Selecciona componente seed de la nave.
-;Dom       :
-;Rec       :
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero
 (define (Selector_seed_nave nave)
   (if (nave? nave)
       (car (cdr (cdr (cdr (cdr nave)))))
@@ -137,8 +136,8 @@
   )
 
 ;Funcion 11: Selecciona componente estadojuego de la nave.
-;Dom       :
-;Rec       :
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero
 (define (Selector_estadojuego_nave nave)
   (if (nave? nave)
       (car (cdr (cdr (cdr (cdr (cdr nave))))))
@@ -147,8 +146,8 @@
   )
 
 ;Funcion 12: Selecciona componente angulo de la nave.
-;Dom       :
-;Rec       :
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero
 (define (Selector_angulo_nave nave)
   (if (nave? nave)
       (car (cdr (cdr (cdr (cdr (cdr(cdr nave)))))))
@@ -159,8 +158,8 @@
 ;-------------------------------------------------------------------------------------------------- MODIFICADORES NAVE -
 
 ;Funcion 13: Toma una estructura nave, un nuevo space y retorna una nueva nave con nuevo space.
-;Dom       :
-;Rec       :
+;Dom       : Nave x lista nuevas variables.
+;Rec       : Nave
 (define (nave->variables nave nuevasvariables)
   (if (and (nave? nave)
            )
@@ -170,8 +169,8 @@
   )
 
 ;Funcion 14: Toma una estructura nave, un nuevo "x" y retorna una nueva nave con nuevo "x".
-;Dom       :
-;Rec       :
+;Dom       : Lista Nave x numero.
+;Rec       : Nave
 (define (nave->px nave nuevopx)
   (if (and (nave? nave)
            (< -1 nuevopx)
@@ -183,8 +182,8 @@
   )
 
 ;Funcion 15: Toma una estructura nave, un nuevo "y" y retorna una nueva nave con nuevo "y".
-;Dom       :
-;Rec       :
+;Dom       : Lista Nave x numero.
+;Rec       : Nave
 (define (nave->py nave nuevopy)
   (if (and (nave? nave)
            (< -1 nuevopy)
@@ -195,8 +194,8 @@
   )
 
 ;Funcion 16: Toma una estructura nave, una nueva "velocidad" y retorna una nueva nave con nuevo "velocidad".
-;Dom       :
-;Rec       :
+;Dom       : Lista Nave x numero.
+;Rec       : Nave
 (define (nave->velocidad nave nuevavelocidad)
   (if (and (nave? nave)
            (number? nuevavelocidad)
@@ -207,8 +206,8 @@
   )
 
 ;Funcion 17: Toma una estructura nave, un nuevo "seed" y retorna una nueva nave con nuevo "seed".
-;Dom       :
-;Rec       :
+;Dom       : Lista Nave x numero.
+;Rec       : Nave
 (define (nave->seed nave nuevoseed)
   (if (and (nave? nave)
            )
@@ -218,8 +217,8 @@
   )
 
 ;Funcion 18: Toma una estructura nave, un nuevo "estadojuego" y retorna una nueva nave con nuevo "estadojuego".
-;Dom       :
-;Rec       :
+;Dom       : Lista Nave x numero.
+;Rec       : Nave
 (define (nave->estadojuego nave nuevoestado)
   (if (and (nave? nave)
            )
@@ -229,8 +228,8 @@
   )
 
 ;Funcion 19: Toma una estructura nave, un nuevo "angulo" y retorna una nueva nave con nuevo "angulo".
-;Dom       :
-;Rec       :
+;Dom       : Lista Nave x numero.
+;Rec       : Nave
 (define (nave->angulo nave nuevoangulo)
   (if (and (nave? nave)
            )
@@ -242,8 +241,8 @@
 ;-------------------------------------------------------------------------------------------------- F.VARIAS NAVE
 
 ;Funcion 20: Movimiento de la nave.
-;Dom       :
-;Rec       :
+;Dom       : Lista space x numero x numero
+;Rec       : Nave
 (define (moveShip space angulo velocidad seed)
   (if (ComparacionNave (Selector_Asteroides space)
                        (nave->velocidad (nave->angulo (nave->py (nave->px (Selector_Nave space)
@@ -300,15 +299,15 @@
                        )      
       ) 
   )
-
 ;-------------------------------------------------------------------------------------------------------------FIN NAVE-------------
+
 ;-------------------------------------------------------------------------------------------------- TDA ASTEROIDES
 ;-------------------------------------------------------------------------------------------------- REPRESENTACION ASTEROIDE
-;(init_asteroid  space px py angulo velocidad radio seed )
 ;-------------------------------------------------------------------------------------------------- CONSTRUCTOR ASTEROIDE
+
 ;Funcion 21: Construye un asteroide.
-;Dom       :
-;Rec       :
+;Dom       : lista que contiene las variables M N A P L y seed (numeros) x numero x numero x numero x numero x numero x numero.
+;Rec       : Lista Asteroide.
 (define (create_Asteroide  variables px py angulo velocidad radio seed )
   (if (and (number? px) (number? py) (number?  angulo) (number?  velocidad) (number? seed) (number? radio) )
       (list variables px py angulo velocidad radio seed)
@@ -319,8 +318,8 @@
 ;-------------------------------------------------------------------------------------------------- F. DE PERTENENCIA ASTEROIDE
 
 ;Funcion 22: Verifica si el argumento entregado corresponde a una estructura Asteroide.
-;Dom       :
-;Rec       :
+;Dom       : Posible Asteroide.
+;Rec       : Booleano.
 (define (Asteroide? posibleAsteroide)
   (if (list? posibleAsteroide)
       (if (= 7 (length posibleAsteroide))
@@ -345,8 +344,8 @@
 ;-------------------------------------------------------------------------------------------------- SELECTORES ASTEROIDE -
 
 ;Funcion 23: Selecciona las variables entregadas a la estructura asteroide.
-;Dom       :
-;Rec       :
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Lista variables.
 (define (Selector_variables_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car  Asteroide)
@@ -354,9 +353,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable N presente en el tda Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 24: Selecciona la variable N presente en el tda Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_N_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (car (Asteroide)))
@@ -364,9 +363,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable M presente en el tda Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 25: Selecciona la variable M presente en el tda Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
   (define (Selector_M_Asteroide Asteroide)
     (if (Asteroide? Asteroide)
         (car (cdr (car Asteroide)))
@@ -374,9 +373,9 @@
         )
     )
 
-;Funcion  : Selecciona la variable A presente en el tda Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 26: Selecciona la variable A presente en el tda Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_A_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (cdr (cdr (car Asteroide))))
@@ -384,9 +383,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable P presente en el tda Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 27: Selecciona la variable P presente en el tda Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_P_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (cdr (cdr (cdr (car Asteroide)))))
@@ -394,9 +393,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable L presente en el tda Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 28: Selecciona la variable L presente en el tda Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_L_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (cdr (cdr (cdr (cdr (car Asteroide))))))
@@ -404,9 +403,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable seed presente en el tda Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 29: Selecciona la variable seed presente en el tda Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_seedvar_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (cdr (cdr (cdr (cdr (cdr(car Asteroide)))))))
@@ -414,9 +413,9 @@
       )
   )
 
-;Funcion 24: Selecciona componente x del asteroide.
-;Dom       :
-;Rec       :
+;Funcion 30: Selecciona componente x del asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_px_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (cdr Asteroide))
@@ -424,9 +423,9 @@
       )
   )
 
-;Funcion 25: Selecciona componente y del Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 31: Selecciona componente y del Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_py_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (cdr (cdr Asteroide)))
@@ -434,9 +433,9 @@
       )
   )
 
-;Funcion 26: Selecciona componente angulo del Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 32: Selecciona componente angulo del Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_angulo_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (cdr (cdr (cdr Asteroide))))
@@ -444,9 +443,9 @@
       )
   )
 
-;Funcion 27: Selecciona componente velocidad del Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 33: Selecciona componente velocidad del Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_velocidad_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (cdr (cdr (cdr (cdr Asteroide)))))
@@ -454,9 +453,9 @@
       )
   )
 
-;Funcion 28: Selecciona componente radio del Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 34: Selecciona componente radio del Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_radio_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (cdr (cdr (cdr (cdr (cdr Asteroide))))))
@@ -464,9 +463,9 @@
       )
   )
 
-;Funcion 29: Selecciona componente Seed del Asteroide.
-;Dom       :
-;Rec       :
+;Funcion 35: Selecciona componente Seed del Asteroide.
+;Dom       : Posible lista que representa a un Asteroide.
+;Rec       : Numero.
 (define (Selector_seed_Asteroide Asteroide)
   (if (Asteroide? Asteroide)
       (car (cdr (cdr (cdr (cdr (cdr(cdr Asteroide)))))))
@@ -476,9 +475,9 @@
 
 ;-------------------------------------------------------------------------------------------------- MODIFICADORES ASTEROIDE -
 
-;Funcion 30: Toma una estructura Asteroide, unas nuevasvariables y retorna una nuevo Asteroide con unas nuevasvariables.
-;Dom       :
-;Rec       :
+;Funcion 36: Toma una estructura Asteroide, unas nuevasvariables y retorna una nuevo Asteroide con unas nuevasvariables.
+;Dom       : Lista Asteroide x lista de variables (numeros).
+;Rec       : Asteroide
 (define (Asteroide->variables Asteroide nuevasvariables)
   (if (and (Asteroide? Asteroide)  )
       (create_Asteroide nuevasvariables (Selector_px_Asteroide Asteroide) (Selector_py_Asteroide Asteroide) (Selector_angulo_Asteroide Asteroide) (Selector_velocidad_Asteroide Asteroide) (Selector_radio_Asteroide Asteroide)  (Selector_seed_Asteroide Asteroide)  )
@@ -486,9 +485,9 @@
       )
   )
 
-;Funcion 31: Toma una estructura Asteroide, un nuevo "x" y retorna un nuevo Asteroide con nuevo "x".
-;Dom       :
-;Rec       :
+;Funcion 37: Toma una estructura Asteroide, un nuevo "x" y retorna un nuevo Asteroide con nuevo "x".
+;Dom       : Lista Asteroide x numero.
+;Rec       : Asteroide
 (define (Asteroide->px Asteroide nuevopx)
   (if (and (Asteroide? Asteroide) )
       (create_Asteroide (Selector_variables_Asteroide Asteroide) nuevopx (Selector_py_Asteroide Asteroide) (Selector_angulo_Asteroide Asteroide) (Selector_velocidad_Asteroide Asteroide) (Selector_radio_Asteroide Asteroide) (Selector_seed_Asteroide Asteroide) )
@@ -496,9 +495,9 @@
       )
   )
 
-;Funcion 32: Toma una estructura Asteroide, un nuevo "y" y retorna un nuevo Asteroide con nuevo "y".
-;Dom       :
-;Rec       :
+;Funcion 38: Toma una estructura Asteroide, un nuevo "y" y retorna un nuevo Asteroide con nuevo "y".
+;Dom       : Lista Asteroide x numero.
+;Rec       : Asteroide
 (define (Asteroide->py Asteroide nuevopy)
   (if (and (Asteroide? Asteroide)  (< 0 nuevopy) )
       (create_Asteroide (Selector_variables_Asteroide Asteroide) (Selector_px_Asteroide Asteroide) nuevopy (Selector_angulo_Asteroide Asteroide) (Selector_velocidad_Asteroide Asteroide) (Selector_radio_Asteroide Asteroide) (Selector_seed_Asteroide Asteroide) )
@@ -506,9 +505,9 @@
       )
   )
 
-;Funcion 33: Toma una estructura Asteroide, un nuevo "angulo" y retorna un nuevo Asteroide con nuevo "angulo".
-;Dom       :
-;Rec       :
+;Funcion 39: Toma una estructura Asteroide, un nuevo "angulo" y retorna un nuevo Asteroide con nuevo "angulo".
+;Dom       : Lista Asteroide x numero.
+;Rec       : Asteroide
 (define (Asteroide->angulo Asteroide nuevoangulo)
   (if (and (Asteroide? Asteroide) )
       (create_Asteroide (Selector_variables_Asteroide Asteroide) (Selector_px_Asteroide Asteroide) (Selector_py_Asteroide Asteroide) nuevoangulo (Selector_velocidad_Asteroide Asteroide) (Selector_radio_Asteroide Asteroide) (Selector_seed_Asteroide Asteroide) )
@@ -516,9 +515,9 @@
       )
   )
 
-;Funcion 34: Toma una estructura Asteroide, una nueva "velocidad" y retorna un nuevo Asteroide con nuevo "velocidad".
-;Dom       :
-;Rec       :
+;Funcion 40: Toma una estructura Asteroide, una nueva "velocidad" y retorna un nuevo Asteroide con nuevo "velocidad".
+;Dom       : Lista Asteroide x numero.
+;Rec       : Asteroide
 (define (Asteroide->velocidad Asteroide nuevavelocidad)
   (if (and (Asteroide? Asteroide) (number? nuevavelocidad)  )
       (create_Asteroide (Selector_variables_Asteroide Asteroide) (Selector_px_Asteroide Asteroide) (Selector_py_Asteroide Asteroide) (Selector_angulo_Asteroide Asteroide) nuevavelocidad (Selector_radio_Asteroide Asteroide) (Selector_seed_Asteroide Asteroide) )
@@ -526,9 +525,9 @@
       )
   )
 
-;Funcion 35: Toma una estructura Asteroide, un nuevo "radio" y retorna un nuevo Asteroide con nuevo "radio".
-;Dom       :
-;Rec       :
+;Funcion 41: Toma una estructura Asteroide, un nuevo "radio" y retorna un nuevo Asteroide con nuevo "radio".
+;Dom       : Lista Asteroide x numero.
+;Rec       : Asteroide
 (define (Asteroide->radio Asteroide nuevoradio)
   (if (and (Asteroide? Asteroide) )
       (create_Asteroide (Selector_variables_Asteroide Asteroide) (Selector_px_Asteroide Asteroide) (Selector_py_Asteroide Asteroide) (Selector_angulo_Asteroide Asteroide) (Selector_velocidad_Asteroide Asteroide) nuevoradio (Selector_seed_Asteroide Asteroide) )
@@ -536,9 +535,9 @@
       )
   )
 
-;Funcion 36: Toma una estructura Asteroide, un nuevo "seed" y retorna un nuevo Asteroide con nuevo "seed".
-;Dom       :
-;Rec       :
+;Funcion 42: Toma una estructura Asteroide, un nuevo "seed" y retorna un nuevo Asteroide con nuevo "seed".
+;Dom       : Lista Asteroide x numero.
+;Rec       : Asteroide
 (define (Asteroide->seed Asteroide nuevoseed)
   (if (and (Asteroide? Asteroide) )
       (create_Asteroide (Selector_variables_Asteroide Asteroide) (Selector_px_Asteroide Asteroide) (Selector_py_Asteroide Asteroide) (Selector_angulo_Asteroide Asteroide) (Selector_velocidad_Asteroide Asteroide) (Selector_radio_Asteroide Asteroide) nuevoseed )
@@ -547,9 +546,9 @@
   )
 
 ;-------------------------------------------------------------------------------------------------- F. VARIAS ASTEROIDES
-;Funcion 37: Cambia de posicion un asteroide a un frame t+1
-;Dom       :
-;Rec       :
+;Funcion 43: Modifica un Asteroide para una posicion t+1.
+;Dom       : Lista Asteroide x numero x numero.
+;Rec       : Asteroide
 (define (moveAsteroid asteroide angulo velocidad)
   (Asteroide->velocidad (Asteroide->angulo (Asteroide->py (Asteroide->px asteroide
                                                                          (mod (+ (Selector_px_Asteroide asteroide)
@@ -567,16 +566,16 @@
                         )      
   )
  
-;Funcion 38: Llamado abreviado de moveAsteroid
-;Dom       : (lista)
-;Rec       : ()
+;Funcion 44: Llamado abreviado de moveAsteroid.
+;Dom       : Lista Asteroide x numero x numero.
+;Rec       : Asteroide
 (define (moverAsteroides asteroide)
   (moveAsteroid asteroide (Selector_angulo_Asteroide asteroide) (Selector_velocidad_Asteroide asteroide))
   )
 
-;Funcion 39: 
-;Dom       :
-;Rec       :
+;Funcion 39: Crea de forma recursiva lineal, una lista con "contador" asteroides.
+;Dom       : numero x numero x numero x numero x numero x numero x numero.
+;Rec       : Lista de asteroides.
 (define (create_RL_Asteroides N M A P L seed contador)
   (if (= 0 contador)
       null
@@ -591,9 +590,9 @@
    )
   )
 
-;Funcion 40: 
-;Dom       :
-;Rec       :
+;Funcion 40: Crea de forma recursiva de cola, una lista con "contador" asteroides.
+;Dom       : numero x numero x numero x numero x numero x numero x Lista de Asteroides.
+;Rec       : Lista de asteroides.
 (define (create_RC_Asteroides N M A P L seed contador Resultado)
   (if (= 0 contador)
       Resultado
@@ -610,14 +609,15 @@
 
 ;-----------------------------------------------------------------------------------------------------------FIN ASTEROIDE------
 
+
 ;-------------------------------------------------------------------------------------------------- TDA DISPARO
 
 ;-------------------------------------------------------------------------------------------------- REPRESENTACION DISPARO
 ;-------------------------------------------------------------------------------------------------- CONSTRUCTOR DISPARO
 
-;Funcion  : Construye un disparo.
-;Dom       :
-;Rec       :
+;Funcion 41: Construye un disparo.
+;Dom       : lista que contiene las variables M N A P L y seed (numeros) x numero x numero x numero x numero x numero x numero x numero x numero.
+;Rec       : lista que representa a un Disparo.
 (define (create_disparo variables px py angulo velocidad pxf pyf largo seed)
   (if (and (number? px) (list? variables) (number? py) (number? pxf) (number? pyf) (number? velocidad) (number? largo) (integer? seed) )
       (list variables px py angulo velocidad pxf pyf largo seed)
@@ -626,9 +626,9 @@
   )
 
 ;-------------------------------------------------------------------------------------------------- F.DE PERTENENCIA DISPARO
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 42:Verifica si el argumento entregado corresponde a una estructura Disparo.
+;Dom       : Posible lista que representa a un Disparo. 
+;Rec       : Booleano.
 (define (disparo? posibledisparo)
   (if (list? posibledisparo)
       (if (= 9 (length posibledisparo))
@@ -653,160 +653,160 @@
   )
 
 ;-------------------------------------------------------------------------------------------------- SELECTORES DISPARO
-;Funcion  : Selecciona las variables entregadas a la estructura disparo.
-;Dom       :
-;Rec       :
+;Funcion 43: Selecciona las variables entregadas a la estructura disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : lista que contiene variable (numeros). 
 (define (Selector_variables_disparo disparo)
   (if (disparo? disparo)
       (car  disparo)
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona la variable N presente en el tda disparo.
-;Dom       :
-;Rec       :
+;Funcion 44: Selecciona la variable N presente en el tda disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_N_disparo disparo)
   (if (disparo? disparo)
       (car (car (disparo)))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona la variable M presente en el tda disparo.
-;Dom       :
-;Rec       :
+;Funcion 45: Selecciona la variable M presente en el tda disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
   (define (Selector_M_disparo disparo)
     (if (disparo? disparo)
         (car (cdr (car disparo)))
-        #f
+        null
         )
     )
 
-;Funcion  : Selecciona la variable A presente en el tda disparo.
-;Dom       :
-;Rec       :
+;Funcion 46: Selecciona la variable A presente en el tda disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_A_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr (car disparo))))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona la variable P presente en el tda disparo.
-;Dom       :
-;Rec       :
+;Funcion 47: Selecciona la variable P presente en el tda disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_P_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr (cdr (car disparo)))))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona la variable L presente en el tda disparo.
-;Dom       :
-;Rec       :
+;Funcion 48: Selecciona la variable L presente en el tda disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_L_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr (cdr (cdr (car disparo))))))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona la variable seed presente en el tda disparo.
-;Dom       :
-;Rec       :
+;Funcion 49: Selecciona la variable seed presente en el tda disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_seedvar_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr (cdr (cdr (cdr(car disparo)))))))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona componente x del disparo.
-;Dom       :
-;Rec       :
+;Funcion 50: Selecciona componente x del disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_px_disparo disparo)
   (if (disparo? disparo)
       (car (cdr disparo))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona componente y del disparo.
-;Dom       :
-;Rec       :
+;Funcion 51: Selecciona componente y del disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_py_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr disparo)))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona componente angulo del disparo.
-;Dom       :
-;Rec       :
+;Funcion 52: Selecciona componente angulo del disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_angulo_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr (cdr disparo))))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona componente velocidad del disparo.
-;Dom       :
-;Rec       :
+;Funcion 53: Selecciona componente velocidad del disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_velocidad_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr (cdr (cdr disparo)))))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona componente 'posicion "x" final' del disparo.
-;Dom       :
-;Rec       :
+;Funcion 54: Selecciona componente 'posicion "x" final' del disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_pxf_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr (cdr (cdr (cdr disparo))))))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona componente 'posicion "y" final' del disparo.
-;Dom       :
-;Rec       :
+;Funcion 55: Selecciona componente 'posicion "y" final' del disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_pyf_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr (cdr (cdr (cdr(cdr disparo)))))))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona componente largo del disparo.
-;Dom       :
-;Rec       :
+;Funcion 56: Selecciona componente largo del disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_largo_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr disparo))))))))
-      #f
+      null
       )
   )
 
-;Funcion  : Selecciona componente seed del disparo.
-;Dom       :
-;Rec       :
+;Funcion 57: Selecciona componente seed del disparo.
+;Dom       : Posible lista que representa a un disparo.
+;Rec       : Numero 
 (define (Selector_seed_disparo disparo)
   (if (disparo? disparo)
       (car (cdr (cdr (cdr (cdr (cdr (cdr (cdr (cdr disparo)))))))))
-      #f
+      null
       )
   )
 
 ;-------------------------------------------------------------------------------------------------- MODIFICADORES DISPARO
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 58: Toma una estructura Disparo, una nueva lista variables y retorna una nueva nave con una nueva lista variables.
+;Dom       : Lista Disparo x lista variables.
+;Rec       : Disparo
 (define (Disparo->variables disparo nuevasvariables)
   (if (and (disparo? disparo) )
       (create_disparo nuevasvariables (Selector_px_disparo disparo) (Selector_py_disparo disparo) (Selector_angulo_disparo disparo) (Selector_velocidad_disparo disparo) (Selector_pxf_disparo disparo) (Selector_pyf_disparo disparo) (Selector_largo_disparo disparo) (Selector_seed_disparo disparo) )
@@ -814,9 +814,9 @@
       )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 59: Toma una estructura Disparo, un nuevo px y retorna una nueva nave con un nuevo px (posicion x).
+;Dom       : Lista Disparo x numero.
+;Rec       : Disparo
 (define (Disparo->px disparo nuevopx)
   (if (and (disparo? disparo))
       (create_disparo (Selector_variables_disparo disparo) nuevopx (Selector_py_disparo disparo) (Selector_angulo_disparo disparo) (Selector_velocidad_disparo disparo) (Selector_pxf_disparo disparo) (Selector_pyf_disparo disparo) (Selector_largo_disparo disparo) (Selector_seed_disparo disparo) )
@@ -824,9 +824,9 @@
       )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 60: Toma una estructura Disparo, un nuevo py y retorna una nueva nave con un nuevo py (posicion y).
+;Dom       : Lista Disparo x numero.
+;Rec       : Disparo
 (define (Disparo->py disparo nuevopy)
   (if (and (disparo? disparo) )
       (create_disparo (Selector_variables_disparo disparo) (Selector_px_disparo disparo) nuevopy (Selector_angulo_disparo disparo) (Selector_velocidad_disparo disparo) (Selector_pxf_disparo disparo) (Selector_pyf_disparo disparo) (Selector_largo_disparo disparo) (Selector_seed_disparo disparo) )
@@ -834,9 +834,9 @@
       )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 61: Toma una estructura Disparo, un nuevo angulo y retorna una nueva nave con un nuevo angulo.
+;Dom       : Lista Disparo x numero.
+;Rec       : Disparo
 (define (Disparo->angulo disparo nuevoangulo)
   (if (and (disparo? disparo) )
       (create_disparo (Selector_variables_disparo disparo) (Selector_px_disparo disparo) (Selector_py_disparo disparo) nuevoangulo (Selector_velocidad_disparo disparo) (Selector_pxf_disparo disparo) (Selector_pyf_disparo disparo) (Selector_largo_disparo disparo) (Selector_seed_disparo disparo) )
@@ -844,9 +844,9 @@
       )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 62: Toma una estructura Disparo, una nueva velocidad y retorna una nueva nave con una nueva velocidad.
+;Dom       : Lista Disparo x numero.
+;Rec       : Disparo
 (define (Disparo->velocidad disparo nuevovelocidad)
   (if (and (disparo? disparo) )
       (create_disparo (Selector_variables_disparo disparo) (Selector_px_disparo disparo) (Selector_py_disparo disparo) (Selector_angulo_disparo disparo) nuevovelocidad (Selector_pxf_disparo disparo) (Selector_pyf_disparo disparo) (Selector_largo_disparo disparo) (Selector_seed_disparo disparo) )
@@ -854,9 +854,9 @@
       )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 63: Toma una estructura Disparo, un nuevo pxf y retorna una nueva nave con un nuevo pxf (posicion x final).
+;Dom       : Lista Disparo x numero.
+;Rec       : Disparo
 (define (Disparo->pxf disparo nuevopxf)
   (if (and (disparo? disparo))
       (create_disparo (Selector_variables_disparo disparo) (Selector_px_disparo disparo) (Selector_py_disparo disparo) (Selector_angulo_disparo disparo) (Selector_velocidad_disparo disparo) nuevopxf (Selector_pyf_disparo disparo) (Selector_largo_disparo disparo) (Selector_seed_disparo disparo) )
@@ -864,9 +864,9 @@
       )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 64: Toma una estructura Disparo, un nuevo pyf y retorna una nueva nave con un nuevo pyf (posicion x final).
+;Dom       : Lista Disparo x numero.
+;Rec       : Disparo
 (define (Disparo->pyf disparo nuevopyf)
   (if (and (disparo? disparo))
       (create_disparo (Selector_variables_disparo disparo) (Selector_px_disparo disparo) (Selector_py_disparo disparo) (Selector_angulo_disparo disparo) (Selector_velocidad_disparo disparo) (Selector_pxf_disparo disparo) nuevopyf (Selector_largo_disparo disparo) (Selector_seed_disparo disparo) )
@@ -874,9 +874,9 @@
       )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 65: Toma una estructura Disparo, un nuevo largo y retorna una nueva nave con un nuevo largo.
+;Dom       : Lista Disparo x numero.
+;Rec       : Disparo
 (define (Disparo->largo disparo nuevolargo)
   (if (and (disparo? disparo) )
       (create_disparo (Selector_variables_disparo disparo) (Selector_px_disparo disparo) (Selector_py_disparo disparo) (Selector_angulo_disparo disparo) (Selector_velocidad_disparo disparo) (Selector_pxf_disparo disparo) (Selector_pyf_disparo disparo) nuevolargo (Selector_seed_disparo disparo) )
@@ -884,9 +884,9 @@
       )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 66: Toma una estructura Disparo, un nuevo seed y retorna una nueva nave con un nuevo seed .
+;Dom       : Lista Disparo x numero.
+;Rec       : Disparo
 (define (Disparo->seed disparo nuevoseed)
   (if (and (disparo? disparo)
            )
@@ -896,9 +896,9 @@
   )
 
 ;-------------------------------------------------------------------------------------------------- F. VARIAS DISPARO
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 67: Crea un nuevo disparo modificando x e y para un t+1.
+;Dom       : Lista disparo x numero.
+;Rec       : Lista Disparo.
 (define (moverDisparo disparo angulo velocidad)
   (Disparo->velocidad (Disparo->angulo (Disparo->py (Disparo->px disparo
                                                                          (mod (+ (Selector_px_disparo disparo)
@@ -916,18 +916,18 @@
                         )                                        
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 68: LLamado simplificado de 67.
+;Dom       : Lista Disparo.
+;Rec       : Lista Disparo.
 (define (moverDisparos disparo)
   (moverDisparo disparo (Selector_angulo_disparo disparo) (Selector_velocidad_disparo disparo))
  )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 69: Crea un disparo a partir de la nave en space, ademar mueve su entorno t+1.
+;Dom       : Lista Space x numeo x numero.
+;Rec       : Lista Space modificada.
 (define (Shoot space constante seed)
-  (if (and (CheckSpace space) (number? constante))
+  (if (CheckSpace space)
       (if (ComparacionNave (Selector_Asteroides (space->Disparos (Update_Space space seed)
                                                                   (append (list (create_disparo (Selector_variables_nave (Selector_Nave space)) 
                                                                                                 (Selector_px_nave (Selector_Nave space)) 
@@ -995,14 +995,15 @@
   )
 
 ;-------------------------------------------------------------------------------------------------------------FIN DISPARO------
+
 ;-------------------------------------------------------------------------------------------------- TDA SPACE 
 ;-------------------------------------------------------------------------------------------------- REPRESENTACION SPACE 
 
 ;-------------------------------------------------------------------------------------------------- CONSTRUCTOR SPACE 
 
-;Funcion  : Construye un space.
-;Dom       :
-;Rec       :
+;Funcion 70: Construye un space.
+;Dom       : Numero x numero x numero x numero x numero x numero x Lista Nave x lista asteroides x lista disparos.
+;Rec       : Lista que representa a un Space.
 (define (create_Space N M A P L seed nave asteroides disparos)
   (if (and (integer? N) (< 0 N) (integer? M) (< 0 M) (integer? A) (< 0 A) (number? P) (< 0 P) (number? L) (< 0 L) (integer? seed)
            (nave? nave) (list? asteroides) (list? disparos) )
@@ -1013,14 +1014,14 @@
   )
 
 ;-------------------------------------------------------------------------------------------------- F.DE PERTENENCIA SPACE
-;Funcion  : Funcion de pertenencia a Space.
-;Dom       :
-;Rec       :
+;Funcion 71: Funcion de pertenencia a Space.
+;Dom       : Lista posible Space.
+;Rec       : Booleano
 (define (CheckSpace posiblespace)
   (if (list? posiblespace)
       (if (= 2 (length posiblespace))
           (if (and
-               (list?   (car posiblespace))
+               (list?   (car posiblespace))                                             ; Lista variables N M A P L Y SEED
                (number? (car (car posiblespace)))                                       ; N
                (< 0     (car (car posiblespace)))                                       ; N mayor a 0
                (number? (car (car posiblespace)))                                       ; M
@@ -1043,9 +1044,9 @@
 
 ;-------------------------------------------------------------------------------------------------- SELECTORES SPACE 
 
-;Funcion  : Selecciona las variables presente en el tda Space.
-;Dom       :
-;Rec       :
+;Funcion 72: Selecciona las variables presente en el tda Space.
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Lista de variables O 
 (define (Selector_Variables space)
   (if (CheckSpace space)
       (car space)
@@ -1053,9 +1054,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable N presente en el tda Space.
-;Dom       :
-;Rec       :
+;Funcion 73: Selecciona la variable N presente en el tda Space.
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_N space)
   (if (CheckSpace space)
       (car (car space))
@@ -1063,9 +1064,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable M presente en el tda Space.
-;Dom       :
-;Rec       :
+;Funcion 74: Selecciona la variable M presente en el tda Space.
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_M space)
   (if (CheckSpace space)
       (car (cdr (car space)))
@@ -1073,9 +1074,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable A presente en el tda Space.
-;Dom       :
-;Rec       :
+;Funcion 75: Selecciona la variable A presente en el tda Space.
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_A space)
   (if (CheckSpace space)
       (car (cdr (cdr (car space))))
@@ -1083,9 +1084,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable P presente en el tda Space.
-;Dom       :
-;Rec       :
+;Funcion 76: Selecciona la variable P presente en el tda Space.
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_P space)
   (if (CheckSpace space)
       (car (cdr (cdr (cdr (car space)))))
@@ -1093,9 +1094,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable L presente en el tda Space.
-;Dom       :
-;Rec       :
+;Funcion 77: Selecciona la variable L presente en el tda Space.
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_L space)
   (if (CheckSpace space)
       (car (cdr (cdr (cdr (cdr (car space))))))
@@ -1103,9 +1104,9 @@
       )
   )
 
-;Funcion  : Selecciona la variable L presente en el tda Space.
-;Dom       :
-;Rec       :
+;Funcion 78: Selecciona la variable L presente en el tda Space.
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_seed space)
   (if (CheckSpace space)
       (car (cdr (cdr (cdr (cdr (cdr(car space)))))))
@@ -1113,9 +1114,9 @@
       )
   )
 
-;Funcion  : Selecciona la nave presente en el tda Space.
-;Dom       :
-;Rec       :
+;Funcion 79: Selecciona la nave presente en el tda Space.
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_Nave space)
   (if (CheckSpace space)
       (car (car (cdr space)))
@@ -1123,9 +1124,9 @@
       )
   )
 
-;Funcion  : Selecciona los asteroides presentes en el tda Space.
-;Dom       :
-;Rec       :
+;Funcion 80: Selecciona los asteroides presentes en el tda Space.
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_Asteroides space)
   (if (CheckSpace space)
       (car (cdr (car (cdr space))))
@@ -1133,9 +1134,9 @@
       )
   )
 
-;Funcion  : Selecciona los Disparos presente en el tda Space.
-;Dom       :
-;Rec       :
+;Funcion 81: Selecciona los Disparos presente en el tda Space.
+;Dom       : Posible lista que representa a una nave.
+;Rec       : Numero 
 (define (Selector_Disparos space)
   (if (CheckSpace space)
       (car (cdr (cdr (car (cdr space)))))
@@ -1144,7 +1145,7 @@
   )
 
 ;-------------------------------------------------------------------------------------------------- MODIFICADORES SPACE 
-;Funcion  : 
+;Funcion 82: 
 ;Dom       :
 ;Rec       :
 (define (space->N space nuevoN )
@@ -1154,7 +1155,7 @@
       )               
   )
 
-;Funcion  : 
+;Funcion 83: 
 ;Dom       :
 ;Rec       :
 (define (space->M space nuevoM )
@@ -1164,7 +1165,7 @@
       )               
   )
 
-;Funcion  : 
+;Funcion 84: 
 ;Dom       :
 ;Rec       :
 (define (space->A space nuevoA )
@@ -1174,7 +1175,7 @@
       )                 
   )
 
-;Funcion  : 
+;Funcion 85: 
 ;Dom       :
 ;Rec       :
 (define (space->P space nuevoP )
@@ -1183,7 +1184,7 @@
       space
       )                
   )
-;Funcion  : 
+;Funcion 86: 
 ;Dom       :
 ;Rec       :
 (define (space->L space nuevoL )
@@ -1193,7 +1194,7 @@
       )           
   )
 
-;Funcion  : 
+;Funcion 87: 
 ;Dom       :
 ;Rec       :
 (define (space->seed space nuevaseed )
@@ -1203,7 +1204,7 @@
       )           
   )
 
-;Funcion  : 
+;Funcion 88: 
 ;Dom       :
 ;Rec       :
 (define (space->Nave space nuevaNave )
@@ -1213,7 +1214,7 @@
       )           
   )
 
-;Funcion  : 
+;Funcion 89: 
 ;Dom       :
 ;Rec       :
 (define (space->Asteroides space nuevosAsteroides )
@@ -1223,7 +1224,7 @@
       )           
   )
 
-;Funcion  : 
+;Funcion 90: 
 ;Dom       :
 ;Rec       :
 (define (space->Disparos space nuevosDisparos )
@@ -1234,19 +1235,19 @@
   )
 
 ;-------------------------------------------------------------------------------------------------- F. VARIAS SPACE
-;Funcion  : Crea una lista de "N" ceros para representar una fila vacia.
-;Dom       :
-;Rec       :
+;Funcion 91: Crea una lista de "N" ceros para representar una fila vacia.
+;Dom       : Numero
+;Rec       : Lista de N terminos (en este caso con [ ]).
 (define (create_fila_vacia N)
   (if (= N 0)
       (list)
-      (cons 0 (create_fila_vacia (- N 1)) )
+      (cons "[ ]" (create_fila_vacia (- N 1)) )
       )
   )
 
-;Funcion  : Crea una matriz tablero de MxN vacio.
-;Dom       :
-;Rec       :
+;Funcion 92: Crea una matriz tablero de MxN vacio.
+;Dom       : Numero x numero (Enteros)
+;Rec       : Lista de listas.
 (define (create_tablero_vacio M N)
   (if (or (string? M) (string? N) (list? M) (list? N) (< N 0) (< M 0) )
       (list)
@@ -1257,9 +1258,9 @@
       )
   )
 
-;Funcion  : Selecciona una fila de el tablero.
-;Dom       :
-;Rec       :
+;Funcion 93: Selecciona una fila de el tablero.
+;Dom       : Lista x numero x numero.
+;Rec       : Lista pertenenciente a lista de listas.
 (define (Selector_fila space py auxiliar)
   (if (= auxiliar py)
       (car space)
@@ -1267,9 +1268,9 @@
       )
   )
 
-;Funcion  : Llamado simplificado de Selector_fila.
-;Dom       :
-;Rec       :
+;Funcion 94: Llamado simplificado de Selector_fila.
+;Dom       : Lista x numero.
+;Rec       : Lista pertenenciente a lista de listas.
 (define (Seleccion_posicion space py)
   ( if (< 0 py)
        (Selector_fila space py 1)
@@ -1277,9 +1278,9 @@
        )
   )
 
-;Funcion que selecciona un elemento, de una columna especifica, de una fila en el tablero.
-;Dom       :
-;Rec       :
+;Funcion 95: Selecciona un elemento, de una columna especifica, de una fila en el tablero.
+;Dom       : Lista de Listas x numero x numero.
+;Rec       : Elemento en la poscion.
 (define (Selector_x_y matriz px py)
   ( if (and (< 0 py) (< 0 px) )
        (Seleccion_posicion (Seleccion_posicion matriz py) px)
@@ -1287,21 +1288,26 @@
        )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
-(define (Comparacion lista elemento )
-  (if (equal?  (cdr lista) null)
+;Funcion 96: Compara si ha chocado un asteroide con una lista de asteroides.
+;Dom       : Lista de asteroides x Lista Asteroide.
+;Rec       : Booleano.
+(define (Comparacion listaAsteroides Asteroide )
+  (if (equal?  (cdr listaAsteroides) null)
       #f
-      (or (Comparacion (cdr lista) elemento)
-          (Choque? (Selector_px_Asteroide elemento) (Selector_py_Asteroide elemento) (Selector_radio_Asteroide elemento) (Selector_px_Asteroide (car lista)) (Selector_py_Asteroide (car lista)) (Selector_radio_Asteroide (car lista)) )
+      (or (Comparacion (cdr listaAsteroides) Asteroide)
+          (Choque? (Selector_px_Asteroide Asteroide)
+                   (Selector_py_Asteroide Asteroide)
+                   (Selector_radio_Asteroide Asteroide)
+                   (Selector_px_Asteroide (car listaAsteroides))
+                   (Selector_py_Asteroide (car listaAsteroides))
+                   (Selector_radio_Asteroide (car listaAsteroides)) )
           )
       )
   )
 
-;Funcion  : Compara si se intersecta la nave con una lista de asteroides.
-;Dom       :
-;Rec       :
+;Funcion 97: Compara si se intersecta la nave con asteroides en una lista de asteroides.
+;Dom       : Lista de Asteroides x lista nave x numero (radionave).
+;Rec       : Booleano.
 (define (ComparacionNave lista Nave radio)
   (if (= 0 (length lista))
       #f
@@ -1311,9 +1317,9 @@
       )
   )
 
-;Funcion  : Verifica si el disparo choca con un asteroide
-;Dom       :
-;Rec       :
+;Funcion 98: Verifica si el disparo choca con un asteroide de ser asi entrega una lista con el asteroide respectivo eliminado de ella (la lista).
+;Dom       : Lista de Asteroides x Lista disparo.
+;Rec       : Lista sin el Asteroide que colisiona.
 (define (eliminar_elemento_lista lista elem)  
   (cond [(equal? lista null) null]
         [(equal? #t (Choque? (Selector_px_Asteroide (car lista))
@@ -1321,27 +1327,33 @@
                              (Selector_radio_Asteroide (car lista))
                              (Selector_px_disparo elem)
                              (Selector_px_disparo elem)
-                             radiodisparo)) (cdr lista)]
+                             radiodisparo))
+         (cdr lista)]
         [else (cons (car lista) (eliminar_elemento_lista (cdr lista) elem))]
         )  
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion 99: Entrega el Asteroide que colisiona con el disparo.
+;Dom       : Lista de Asteroides x Lista disparo.
+;Rec       : Lista sin el Asteroide que colisiona.
 (define (identifica_elemento lista elem)
   (if (or (equal? lista null) (equal? elem null))
       null
-      (if (equal? #t (Choque? (Selector_px_Asteroide (car lista)) (Selector_py_Asteroide (car lista)) (Selector_radio_Asteroide (car lista)) (Selector_px_disparo elem) (Selector_py_disparo elem) radiodisparo))
+      (if (equal? #t (Choque? (Selector_px_Asteroide (car lista))
+                              (Selector_py_Asteroide (car lista))
+                              (Selector_radio_Asteroide (car lista))
+                              (Selector_px_disparo elem)
+                              (Selector_py_disparo elem)
+                              radiodisparo))
           (car lista)
-          (cons (car lista) (identifica_elemento (cdr lista) elem))
+          (identifica_elemento (cdr lista) elem)
           )
       )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion100: Verifica si el disparo choca con un asteroide de ser asi entrega un Booleano.
+;Dom       : Lista de Asteroides x lista Disparo
+;Rec       : Booleano
 (define (disparo_choca? lista elem)
   (if (equal? lista null)
       #f
@@ -1352,112 +1364,112 @@
       )
   )
 
-;Funcion  : Crea tantos asteroides como pida la seed y todos con un radio equivalente a la mitad del anterior, de ser 2 el original se entrega una lista vacia.
-;Dom       :
-;Rec       :
+;Funcion101: Crea tantos asteroides como pida la seed y todos con un radio equivalente a la mitad del anterior, de ser 2 el original se entrega una lista vacia. (desde 0 a 7)
+;Dom       : Lista Asteroide x numero x numero.
+;Rec       : Lista de Asteroides de mitad de radio del anterior. 
 (define (fisica_Asteroides asteroide valorRandom seed)
- (if (Asteroide? asteroide)
-  (cond [(>= 2 (Selector_radio_Asteroide asteroide)) (list)
-                                                     ]
-        [(>= 1 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))  (Selector_py_Asteroide asteroide) )  (Selector_px_Asteroide asteroide))                                                                       
-                                  )]
+  (if (Asteroide? asteroide)
+      (cond [(>= 2 (Selector_radio_Asteroide asteroide)) (list)
+                                                         ]
+            [(>= 1 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))  (Selector_py_Asteroide asteroide) )  (Selector_px_Asteroide asteroide))                                                                       
+                                      )]
         
-        [(= 2 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_N (Selector_variables_Asteroide asteroide))))                                                                       
-                                 )]
+            [(= 2 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_N (Selector_variables_Asteroide asteroide))))                                                                       
+                                     )]
         
-        [(= 3 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 135)) (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 )]
+            [(= 3 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 135)) (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     )]
         
-        [(= 4 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 135)) (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 315)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 )]
+            [(= 4 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 135)) (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 315)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     )]
         
-        [(= 5 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 135)) (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 315)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 225)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 )]
+            [(= 5 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 135)) (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 315)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 225)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     )]
         
-        [(= 6 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 135)) (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 315)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 225)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 90))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (+ (Selector_px_Asteroide asteroide) 0))
-                                 )]
+            [(= 6 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 135)) (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 315)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 225)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 90))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (+ (Selector_px_Asteroide asteroide) 0))
+                                     )]
         
-        [(= 7 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 135)) (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 315)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 225)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 90))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (+ (Selector_px_Asteroide asteroide) 0))
-                                 (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 270)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (+ (Selector_px_Asteroide asteroide) 0))
-                                 )]
+            [(= 7 valorRandom) (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 0))   (Selector_py_Asteroide asteroide)  ) (Selector_px_Asteroide asteroide) )
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 45))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 135)) (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 315)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 225)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide))) (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 90))  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (+ (Selector_px_Asteroide asteroide) 0))
+                                     (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide (round (/(Selector_radio_Asteroide asteroide) 2))) (+ (Selector_velocidad_Asteroide asteroide) seed)) (+ (Selector_angulo_Asteroide asteroide) 270)) (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide))) (+ (Selector_px_Asteroide asteroide) 0))
+                                     )]
         
-        [else             (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
-                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2))
-                                                                                                       (+ (Selector_velocidad_Asteroide asteroide) seed))
-                                                                                 (+ (Selector_angulo_Asteroide asteroide) 0))
-                                                              (Selector_py_Asteroide asteroide)  )
-                                               (Selector_px_Asteroide asteroide) )
+            [else             (list (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
+                                                                                                                             (/ (Selector_radio_Asteroide asteroide) 2))
+                                                                                                           (+ (Selector_velocidad_Asteroide asteroide) seed))
+                                                                                     (+ (Selector_angulo_Asteroide asteroide) 0))
+                                                                  (Selector_py_Asteroide asteroide)  )
+                                                   (Selector_px_Asteroide asteroide) )
                                 
-                                (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
-                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2))
-                                                                                                       (+ (Selector_velocidad_Asteroide asteroide) seed))
-                                                                                 (+ (Selector_angulo_Asteroide asteroide) 45))
-                                                              (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide)))
-                                               (mod (+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                    (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
+                                                                                                                             (/ (Selector_radio_Asteroide asteroide) 2))
+                                                                                                           (+ (Selector_velocidad_Asteroide asteroide) seed))
+                                                                                     (+ (Selector_angulo_Asteroide asteroide) 45))
+                                                                  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide)))
+                                                   (mod (+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
                                 
-                                (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
-                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2))
-                                                                                                       (+ (Selector_velocidad_Asteroide asteroide) seed))
-                                                                                 (+ (Selector_angulo_Asteroide asteroide) 135))
-                                                              (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide)))
-                                               (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                    (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
+                                                                                                                             (/ (Selector_radio_Asteroide asteroide) 2))
+                                                                                                           (+ (Selector_velocidad_Asteroide asteroide) seed))
+                                                                                     (+ (Selector_angulo_Asteroide asteroide) 135))
+                                                                  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide)))
+                                                   (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
                                 
-                                (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
-                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2))
-                                                                                                       (+ (Selector_velocidad_Asteroide asteroide) seed))
-                                                                                 (+ (Selector_angulo_Asteroide asteroide) 315))
-                                                              (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide)))
-                                               (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                    (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
+                                                                                                                             (/ (Selector_radio_Asteroide asteroide) 2))
+                                                                                                           (+ (Selector_velocidad_Asteroide asteroide) seed))
+                                                                                     (+ (Selector_angulo_Asteroide asteroide) 315))
+                                                                  (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide)))
+                                                   (mod(+ (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
                                 
-                                (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
-                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2))
-                                                                                                       (+ (Selector_velocidad_Asteroide asteroide) seed))
-                                                                                 (+ (Selector_angulo_Asteroide asteroide) 225))
-                                                              (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide)))
-                                               (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
+                                    (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
+                                                                                                                             (/ (Selector_radio_Asteroide asteroide) 2))
+                                                                                                           (+ (Selector_velocidad_Asteroide asteroide) seed))
+                                                                                     (+ (Selector_angulo_Asteroide asteroide) 225))
+                                                                  (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 1.5)) (Selector_N_Asteroide asteroide)))
+                                                   (mod(- (Selector_px_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2)) (Selector_M_Asteroide asteroide)))
                                 
-                                (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
-                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2))
-                                                                                                       (+ (Selector_velocidad_Asteroide asteroide) seed))
-                                                                                 (+ (Selector_angulo_Asteroide asteroide) 90))
-                                                              (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide)))
-                                               (+ (Selector_px_Asteroide asteroide) 0))
+                                    (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
+                                                                                                                             (/ (Selector_radio_Asteroide asteroide) 2))
+                                                                                                           (+ (Selector_velocidad_Asteroide asteroide) seed))
+                                                                                     (+ (Selector_angulo_Asteroide asteroide) 90))
+                                                                  (mod (+ (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide)))
+                                                   (+ (Selector_px_Asteroide asteroide) 0))
                                 
-                                (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
-                                                                                                                         (/ (Selector_radio_Asteroide asteroide) 2))
-                                                                                                       (+ (Selector_velocidad_Asteroide asteroide) seed))
-                                                                                 (+ (Selector_angulo_Asteroide asteroide) 270))
-                                                              (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide)))
-                                               (+ (Selector_px_Asteroide asteroide) 0))
-                                )]
-        )
-  (display "No se entregó un Asteroide a FisicadeAsteroides")
+                                    (Asteroide->px (Asteroide->py (Asteroide->angulo (Asteroide->velocidad (Asteroide->radio asteroide
+                                                                                                                             (/ (Selector_radio_Asteroide asteroide) 2))
+                                                                                                           (+ (Selector_velocidad_Asteroide asteroide) seed))
+                                                                                     (+ (Selector_angulo_Asteroide asteroide) 270))
+                                                                  (mod (- (Selector_py_Asteroide asteroide) (* (/(Selector_radio_Asteroide asteroide) 2) 2.5)) (Selector_N_Asteroide asteroide)))
+                                                   (+ (Selector_px_Asteroide asteroide) 0))
+                                    )]
+            )
+      (display "No se entregó un Asteroide a FisicadeAsteroides")
+      )
   )
-  )
-;(space->Asteroides (space->Disparos space nuevosDisparos ) (append asteroides nuevosAsteroides) )
-;Funcion  : 
-;Dom       :
-;Rec       :
+
+;Funcion102: Efectua la colision entre disparos y Asteroides.
+;Dom       : Lista Space x lista Asteroides x lista Disparos x lista de nuevos asteroides x lista de disparos que no provocaron una colision.
+;Rec       : Space modificado con las respectivas colisiones.
 (define (choqueDisparos_Asteroides space asteroides disparos nuevosAsteroides disparoNoChocado)
   (cond [(= 0 (length disparos)) (space->Asteroides (space->Disparos space
                                                                      disparoNoChocado )
@@ -1479,9 +1491,9 @@
         )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion103: LLamado Simplificado de 102.
+;Dom       : Lista Space.
+;Rec       : Space modificado con las respectivas colisiones.
 (define (Choque_Dis_Ast space)
   (if (= 0 (length (Selector_Disparos space)))
       space
@@ -1489,20 +1501,25 @@
       )
   )
 
-;Funcion  : 
+;Funcion104: 
 ;Dom       :
 ;Rec       :
 (define (Asteroide_choca? lista elem)
   (if (equal? lista null)
       #f
-      (if (equal? #t (Choque? (Selector_px_Asteroide (car lista)) (Selector_py_Asteroide (car lista)) (Selector_radio_Asteroide (car lista)) (Selector_px_Asteroide elem) (Selector_py_Asteroide elem) (Selector_radio_Asteroide elem)))
+      (if (equal? #t (Choque? (Selector_px_Asteroide (car lista))
+                              (Selector_py_Asteroide (car lista))
+                              (Selector_radio_Asteroide (car lista))
+                              (Selector_px_Asteroide elem)
+                              (Selector_py_Asteroide elem)
+                              (Selector_radio_Asteroide elem)))
           #t
           (or #f (disparo_choca? (cdr lista) elem))
           )
       )
   )
 
-;Funcion  : 
+;Funcion105: 
 ;Dom       :
 ;Rec       :
 (define (eliminar_asteroide_lista lista elem)
@@ -1517,7 +1534,7 @@
         )  
   )
 
-;Funcion  : 
+;Funcion106: 
 ;Dom       :
 ;Rec       :
 (define (modificarTrayectoria lista elem)
@@ -1527,7 +1544,7 @@
       )    
   )
 
-;Funcion  : 
+;Funcion107: 
 ;Dom       :
 ;Rec       :
 (define (AplicacionModTrayectoria lista resultado)
@@ -1537,9 +1554,9 @@
         )
   )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion108: Funcion que mueve elementos dentro del space a un t+1, ademas verifica condiciones de perdida, victoria, coliciones y destuccion de Asteroides. 
+;Dom       : Lista Space x Entero.
+;Rec       : Lista Space en t+1.
 (define (Update_Space space seed)
   (if (ComparacionNave (Selector_Asteroides space) (Selector_Nave space) radionave)
       (space->Nave space (nave->estadojuego (Selector_Nave space) 0) )      
@@ -1592,7 +1609,7 @@
       )
   )
 
-;Funcion  : 
+;Funcion109: 
 ;Dom       :
 ;Rec       :
 (define (Demo_lazy space seed)
@@ -1606,16 +1623,16 @@
   )
   
 
-;Funcion  : 
+;Funcion110: 
 ;Dom       :
 ;Rec       :
 (define (Space->String space resultado)
    null
  )
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion111: Verifica el la colicion de dos objetos tomando en cuenta su distancia y radio.
+;Dom       : Numero x numero x numerox numero x numero x numero
+;Rec       : Booleano
 (define (Choque? objeto1x objeto1y radio1 objeto2x objeto2y radio2)
   (if (and (number? objeto1x)
            (< 0 objeto1x )
@@ -1644,9 +1661,9 @@
 
 ;-------------------------------------------------------------------------------------------------- CREATESPACE RL
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion112: Funcion que crea un espacio con almenos una funcion Recursiva Lineal.
+;Dom       : Numero x numero x numero x numero x numero x numero.
+;Rec       : Lista Space
 (define (createSpaceRL N M A P L seed)
   (create_Space N
                 M
@@ -1663,9 +1680,9 @@
 ;-------------------------------------------------------------------------------------------------------------FIN SPACE RC------
 ;-------------------------------------------------------------------------------------------------- CREATESPACE RC
 
-;Funcion  : 
-;Dom       :
-;Rec       :
+;Funcion113: Funcion que crea un espacio con almenos una funcion Recursiva de Cola.
+;Dom       : Numero x numero x numero x numero x numero x numero.
+;Rec       : Lista Space
 (define (createSpaceRC N M A P L seed)
   (create_Space N
                 M
